@@ -17,4 +17,15 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
   
   describe "#read_str" do
   end
+  
+  describe "#get_outputter" do
+    
+    it 'returns an instance of a defined formatter class' do
+      @outputter.get_formatter(:pointing, {}).should be_an_instance_of Pslm::LatexOutputter::PointingFormatter
+    end
+    
+    it 'returns nil if there is no such formatter class' do
+      @outputter.get_formatter(:cursing, {}).should eq nil
+    end
+  end
 end

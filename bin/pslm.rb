@@ -5,7 +5,7 @@ require 'optparse'
 
 DEFAULT_SETUP = {
   :general => {
-    :format => 'latex', # currently single available option
+    :format => 'latex', # latex|pslm
     :output_file => nil,
   },
   :input => {
@@ -14,27 +14,12 @@ DEFAULT_SETUP = {
     :join => false,
     :skip_verses => nil,
   },
-  :output => {
-    :skip_title => false,
-    :title_pattern => nil,
-    :no_formatting => false,
-    :accents => [2,2],
-    :preparatory => [0,0],
-    :accent_style => :underline,
-    :lettrine => false,
-    :novydvur_newlines => false,
-    :prepend_text => nil,
-    :output_append_text => nil,
-    :line_break_last_line => false,
-    :dashes => false,
-    :paragraph_space => true,
-    :guillemets => false,
-    :mark_short_verses => false,
-  }  
+  :output => Pslm::Outputter::DEFAULT_SETUP.dup
 }
     
 setup = DEFAULT_SETUP.dup
 
+# TODO the setup below doesn't yet respect the structure of the options above
 optparse = OptionParser.new do |opts|
   
   opts.separator "== General options"

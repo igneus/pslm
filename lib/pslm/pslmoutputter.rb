@@ -10,7 +10,7 @@ module Pslm
     
     # doesn't respect any options; accepts them only because of a common
     # outputter interface
-    def process(psalm, options=nil)
+    def process(psalm, options={})
       psalm_assembled = psalm.verses.collect do |verse|
         
         verse_assembled = verse.parts.collect do |part|

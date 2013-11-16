@@ -1,10 +1,14 @@
 # asap
 
+* MAJOR GOAL: fully implement functionality of the [psalmpreprocessor](https://github.com/igneus/In-adiutorium/blob/master/nastroje/psalmpreprocessor.rb)
+* handle strophes
+
 ## output
-* fully implement functionality of the [psalmpreprocessor](https://github.com/igneus/In-adiutorium/blob/master/nastroje/psalmpreprocessor.rb)
 
 ## input
 * psalm files with optional YAML front-matter instead of the title line (provide for more metadata)
+
+
 
 # later
 
