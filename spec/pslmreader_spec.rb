@@ -28,5 +28,18 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       @psalm.verses.should be_an_instance_of Array
       @psalm.verses.size.should eq 2
     end
+    
+    it 'parses words' do
+      @psalm.verses[0].first.words.size.should eq 4
+    end
+    
+    it 'parses even syllables' do
+      first_verse = @psalm.verses[0]
+      first_part = first_verse.first
+      first_part.words[0].syllables.size.should eq 3
+      first_part.words[1].syllables.size.should eq 3
+      first_part.words[2].syllables.size.should eq 2
+      first_part.words[3].syllables.size.should eq 2
+    end
   end
 end

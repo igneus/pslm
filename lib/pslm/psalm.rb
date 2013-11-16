@@ -25,4 +25,32 @@ class Pslm::Psalm
     
     attr_accessor :flex, :first, :second
   end
+  
+  class VersePart
+    def initialize(words, src)
+      @words = words
+      @src = src
+    end
+    
+    attr_reader :words, :src
+  end
+  
+  class Word
+    def initialize(syllables)
+      @syllables = syllables
+    end
+    
+    attr_reader :syllables
+  end
+  
+  class Syllable
+    def initialize(chars, accent=false)
+      @chars = chars
+      @accent = accent
+    end
+    
+    def accent?
+      @accent
+    end
+  end
 end

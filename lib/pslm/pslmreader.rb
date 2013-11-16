@@ -46,13 +46,26 @@ module Pslm
           
           unless part_loaded =~ part[:regex]
             if part[:name] == :flex then
-              next
+              next # probably a verse without flex
             end
             
-            raise PslmSyntaxError.new("Unexpected verse part on line #{istream.lineno}.")
+            raise PslmSyntaxError.new("Unexpected verse part on line #{istream.lineno}. Expecting #{part[:name]}")
           end
           
-          verse.send(part[:method], part_loaded)
+          part_src = part_loaded.dup
+          if [:flex, :first].include? part[:name] then
+            part_loaded.sub!(/[\+\*]/, '') # there should be only one of these chars, at the very end of the line
+            part_loaded.strip!
+          end
+          
+          words = Psalm::VersePart.new(part_loaded.split(' ').collect {|w|
+            sylls = w.split(/[\/\[\]]/)
+            sylls.delete('') # when there is a divider at the beginning/end of the string
+            sylls = sylls.collect {|s| Psalm::Syllable.new s }
+            Psalm::Word.new(sylls)
+          }, part_src)
+          
+          verse.send(part[:method], words)
           
           unless part[:name] == :second
             part_loaded = load_verse_part istream
@@ -77,6 +90,7 @@ module Pslm
       return strip_comments(l)
     end
     
+    # anything from # to the end of line is a comment
     def strip_comments(s)
       ci = s.index('#')
       if ci != nil then
@@ -85,9 +99,11 @@ module Pslm
         return s
       end
     end
-  end
-  
-  class PslmSyntaxError < RuntimeError
+    
+    public
+    
+    class PslmSyntaxError < RuntimeError
+    end
   end
   
   # wraps an input stream; counts lines read
@@ -101,8 +117,9 @@ module Pslm
     attr_reader :lineno
     
     def gets
-      @lineno += 1
-      return @stream.gets
+      l = @stream.gets
+      @lineno += 1 if l != nil
+      return l
     end
   end
 
