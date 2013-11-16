@@ -9,7 +9,7 @@ Under development, not useful at all.
 
 ## Who might be (later) interested
 
-Catholic typesetters dealing with Divine Office and gregorian chant.
+Typesetters dealing with Catholic Divine Office and gregorian chant.
 
 ## History
 

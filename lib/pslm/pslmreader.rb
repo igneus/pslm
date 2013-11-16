@@ -73,7 +73,7 @@ module Pslm
               sylls << Psalm::Syllable.new(s, accent)
             end
             Psalm::Word.new(sylls)
-          }, part_src)
+          }, part_src, part[:name])
           
           verse.send(part[:method], words)
           

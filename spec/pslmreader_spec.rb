@@ -29,6 +29,15 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       @psalm.verses.size.should eq 2
     end
     
+    it 'leaves flex nil if not found' do
+      @psalm.verses[0].flex.should eq nil
+    end
+    
+    it 'sets verse parts the appropriate position' do
+      @psalm.verses[0].first.pos.should eq :first
+      @psalm.verses[0].second.pos.should eq :second
+    end
+    
     it 'parses words' do
       @psalm.verses[0].first.words.size.should eq 4
     end
