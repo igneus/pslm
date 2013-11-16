@@ -41,5 +41,11 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       first_part.words[2].syllables.size.should eq 2
       first_part.words[3].syllables.size.should eq 2
     end
+    
+    it 'parses accentuated syllables' do
+      first_verse = @psalm.verses[0]
+      first_part = first_verse.first
+      first_part.words[3].syllables[0].accent?.should eq true
+    end
   end
 end

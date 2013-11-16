@@ -48,7 +48,7 @@ class Pslm::Psalm
       @chars = chars
       @accent = accent
     end
-    
+        
     def accent?
       @accent
     end

@@ -59,9 +59,19 @@ module Pslm
           end
           
           words = Psalm::VersePart.new(part_loaded.split(' ').collect {|w|
-            sylls = w.split(/[\/\[\]]/)
-            sylls.delete('') # when there is a divider at the beginning/end of the string
-            sylls = sylls.collect {|s| Psalm::Syllable.new s }
+            sylls = []
+            while w.size > 0 do
+              i = w.index(/[\/\[\]]/)
+              if i == nil then # last syllable
+                sylls << Psalm::Syllable.new(w)
+                break
+              end
+              s = w.slice!(0..i)
+              accent = (s[-1] == ']')
+              s = s[0..-2] # discard the delimiter
+              next if s == '' # delimiter at the beginning/end of the string
+              sylls << Psalm::Syllable.new(s, accent)
+            end
             Psalm::Word.new(sylls)
           }, part_src)
           
