@@ -46,6 +46,7 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       first_verse = @psalm.verses[0]
       first_part = first_verse.first
       first_part.words[3].syllables[0].accent?.should eq true
+      first_part.words[3].syllables[1].accent?.should eq false
     end
   end
 end
