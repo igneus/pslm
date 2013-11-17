@@ -1,7 +1,6 @@
 # pslm
 
-Ruby gem providing a commandline tool 'pslm' for dealing with
-"plain text psalm files" and an underlying library.
+Ruby gem providing a commandline tool and a library for dealing with "plain text psalm files".
 
 ## Status
 
