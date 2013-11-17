@@ -23,6 +23,7 @@ module Pslm
       :verses => {
         :paragraphify => true
       }
+      :skip_verses => 0,
       :strophes => {
         :dashes => false,
         :paragraph_space => true,

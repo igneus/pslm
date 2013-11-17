@@ -10,6 +10,7 @@ module Pslm
       :break_hints,
       :parts,
       :verses,
+      :skip_verses,
       :title,
       :strophes,
       :lettrine,
@@ -28,8 +29,8 @@ module Pslm
       # build the output; on each step apply the appropriate method
       # of each formatter in the given order
       psalm_assembled = psalm.verses.collect do |verse|
-        process_verse(verse, opts, psalm)
-      end.join "\n"
+        process_verse(verse, opts, psalm, formatters)
+      end.delete_if {|v| v == '' }.join "\n"
 
       return Formatter.format(formatters, :psalm,
                               psalm_assembled,
@@ -38,8 +39,8 @@ module Pslm
 
     alias :process :process_psalm
 
-    def process_verse(verse, opts, psalm=nil)
-      formatters = get_formatters(opts)
+    def process_verse(verse, opts, psalm=nil, formatters=nil)
+      formatters = formatters || get_formatters(opts)
 
       verse_assembled = verse.parts.collect do |part|
 
@@ -94,6 +95,7 @@ module Pslm
         # lets all the :formatters: subsequently format :text: assembled from :obj: on the assembly :level:
         def format(formatters, level, text, *args)
           formatters.each do |f|
+            p f.class if level == :verse
             text = f.send("#{level}_format", text, *args)
           end
           return text
@@ -228,7 +230,9 @@ module Pslm
       end
     end
 
-    # formatting of verse parts
+    # formatting of verse parts -
+    # adds part dividing marks (flex, asterisk),
+    # eventually inserts newlines
     class PartsFormatter < Formatter
 
       MARKS = {
@@ -254,7 +258,31 @@ module Pslm
     # inserts a newline between verses
     class VersesFormatter < Formatter
       def verse_format(text, psalm, verse)
-        verse != psalm.verses.last ? text + "\n" : text
+        if verse != psalm.verses.last and text != '' then
+          return text + "\n"
+        else
+          return text
+        end
+      end
+    end
+
+    # skips verses at the beginning
+    class SkipVersesFormatter < Formatter
+      def initialize(options)
+        super(options)
+        @skip_verses = @options # takes just one number as a parameter
+      end
+
+      def verse_format(text, psalm, verse)
+        #super(text, psalm, verse)
+        @verse_counter += 1
+        p @verse_counter
+        p text
+        if @verse_counter <= @skip_verses then
+          return ""
+        end
+
+        return text
       end
     end
 

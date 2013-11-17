@@ -1,16 +1,16 @@
 # asap
 
 * MAJOR GOAL: fully implement functionality of the [psalmpreprocessor](https://github.com/igneus/In-adiutorium/blob/master/nastroje/psalmpreprocessor.rb)
-  important missing features:
-  - append Gloria Patri
-  - skip title
-  - skip n verses at the beginning
 
 * handle strophes
 
 * specify dependencies (normal usage / dev) in the gemspec; verify in a clean gemset
 
-* LatexOutputter: inefficient - creates short-term objects with the same configuration again and again
+* the CLI
+  - must do something useful even without any options (just point 2,2 accents?)
+  - must provide shortcut options for a few most common setups
+  - should detect presence/absence of a psalm title correctly and just warn if the options don't correspond
+  	(but there must be an option to suppress this "clever" behaviour)
 
 ## output
 

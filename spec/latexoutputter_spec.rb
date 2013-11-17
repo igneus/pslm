@@ -5,14 +5,23 @@ require 'stringio'
 
 describe Pslm::LatexOutputter do
   before :each do
+    @reader = Pslm::PslmReader.new()
+
     @psalm_text = "Psalmus 116.
 
 Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
 lau/dá/te e/um, [om]nes [pó]pu/li:"
     # yes, I cheat - I deleted the second line to make the psalm shorter :)
-
-    @reader = Pslm::PslmReader.new()
     @psalm = @reader.read_str(@psalm_text)
+
+    @full_text = "Psalmus 116.
+
+Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
+lau/dá/te e/um, [om]nes [pó]pu/li:
+Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+    @full_psalm = @reader.read_str(@full_text)
+
     @outputter = Pslm::LatexOutputter.new
   end
 
@@ -61,14 +70,6 @@ laudáte eum, omnes pópuli:
     end
 
     it 'paragraphifies verses' do
-      full_text = "Psalmus 116.
-
-Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
-lau/dá/te e/um, [om]nes [pó]pu/li:
-Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
-et véritas Dó/mi/ni ma/net [in] æ[tér]num."
-      full_psalm = @reader.read_str(full_text)
-
       expected = "Psalmus 116.
 
 Laudáte Dóminum, omnes Gentes:
@@ -76,9 +77,17 @@ laudáte eum, omnes pópuli:
 
 Quóniam confirmáta est super nos misericórdia ejus:
 et véritas Dómini manet in ætérnum."
-      @outputter.process(full_psalm, {
+      @outputter.process(@full_psalm, {
         :verses => { :paragraphify => true },
         :title => { :template => :plain }
+      }).should eq expected
+    end
+
+    it 'skips verses' do
+      expected = "Quóniam confirmáta est super nos misericórdia ejus:
+et véritas Dómini manet in ætérnum."
+      @outputter.process(@full_psalm, {
+        :skip_verses => 1,
       }).should eq expected
     end
   end
