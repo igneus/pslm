@@ -6,11 +6,11 @@ module Pslm
   class LatexOutputter
 
     FORMATTER_ORDER = [
-      :title,
       :pointing,
       :break_hints,
       :parts,
       :verses,
+      :title,
       :strophes,
       :lettrine,
       :wrapper,
@@ -32,7 +32,7 @@ module Pslm
       end.join "\n"
 
       return Formatter.format(formatters, :psalm,
-                              psalm.header.title + "\n\n" + psalm_assembled,
+                              psalm_assembled,
                               psalm)
     end
 
@@ -255,6 +255,20 @@ module Pslm
     class VersesFormatter < Formatter
       def verse_format(text, psalm, verse)
         verse != psalm.verses.last ? text + "\n" : text
+      end
+    end
+
+    # formats title
+    class TitleFormatter < Formatter
+      TEMPLATE = {
+        :no => "", # "" % anything => ""
+        :plain => "%s\n\n",
+        :semantic => "\\titulusPsalmi{%s}\n\n"
+      }
+
+      def psalm_format(text, psalm)
+        TEMPLATE[@options[:template]] % psalm.header.title +
+          text
       end
     end
   end

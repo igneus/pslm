@@ -8,8 +8,7 @@ module Pslm
     DEFAULT_SETUP = {
       :no_formatting => false,
       :title => {
-        :skip_title => false,
-        :title_pattern => nil,
+        :template => nil,
       },
       :pointing => {
         :accents => [2,2],

@@ -30,17 +30,15 @@ lau/dá/te e/um, [om]nes [pó]pu/li:"
   describe "#process" do
 
     it 'returns just the text with no options' do
-      expected = "Psalmus 116.
-
-Laudáte Dóminum, omnes Gentes:
+      expected =
+"Laudáte Dóminum, omnes Gentes:
 laudáte eum, omnes pópuli:"
       @outputter.process(@psalm, {}).should eq expected
     end
 
     it 'marks accents' do
-      expected = 'Psalmus 116.
-
-Laudáte Dóminum, \underline{om}nes \underline{Gen}tes:
+      expected =
+'Laudáte Dóminum, \underline{om}nes \underline{Gen}tes:
 laudáte eum, \underline{om}nes \underline{pó}puli:'
       @outputter.process(@psalm, {:pointing => {
         :accents => [2,2],
@@ -57,7 +55,8 @@ Laudáte Dóminum, omnes Gentes:
 laudáte eum, omnes pópuli:
 \end{psalmus}' + "\n"
       @outputter.process(@psalm, {
-        :wrapper => { :environment_name => 'psalmus' }
+        :wrapper => { :environment_name => 'psalmus' },
+        :title => { :template => :plain }
       }).should eq expected
     end
 
@@ -78,7 +77,8 @@ laudáte eum, omnes pópuli:
 Quóniam confirmáta est super nos misericórdia ejus:
 et véritas Dómini manet in ætérnum."
       @outputter.process(full_psalm, {
-        :verses => { :paragraphify => true }
+        :verses => { :paragraphify => true },
+        :title => { :template => :plain }
       }).should eq expected
     end
   end
