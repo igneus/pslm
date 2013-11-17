@@ -38,20 +38,23 @@ module Pslm
 
       verse_assembled = verse.parts.collect do |part|
 
-        part_assembled = part.words.collect do |word|
+        part_assembled = part.words.reverse.collect do |word|
 
-          word_assembled = word.syllables.collect do |syll|
-            Formatter.format(formatters, :syllable, syll, syll)
-          end.join ''
+          word_assembled = word.syllables.reverse.collect do |syll|
+            Formatter.format(formatters, :syllable,
+                              syll, part, word, syll)
+          end.reverse.join ''
 
-          #word_format word_assembled, word
+          Formatter.format(formatters, :word,
+                            word_assembled, word)
+        end.reverse.join ' '
 
-        end.join ' '
-        #part_format part_assembled, part
-
+        Formatter.format(formatters, :part,
+                          part_assembled, part)
       end.join "\n"
-      #verse_format verse_assembled, verse
-      return verse_assembled
+
+      return Formatter.format(formatters, :verse,
+                              verse_assembled, verse)
     end
 
     # takes a Hash of options,
@@ -84,9 +87,9 @@ module Pslm
 
       class << self
         # lets all the :formatters: subsequently format :text: assembled from :obj: on the assembly :level:
-        def format(formatters, level, text, obj)
+        def format(formatters, level, text, *args)
           formatters.each do |f|
-            text = f.send("#{level}_format", text, obj)
+            text = f.send("#{level}_format", text, *args)
           end
           return text
         end
@@ -94,32 +97,70 @@ module Pslm
 
       def initialize(options)
         @options = options
+        @syll_counter = 0
+        @word_counter = 0
+        @part_counter = 0
+        @verse_counter = 0
       end
 
       def psalm_format(text, psalm)
+        @syll_counter = 0
+        @word_counter = 0
+        @part_counter = 0
+        @verse_counter = 0
         text
       end
 
       def verse_format(text, verse)
+        @verse_counter += 1
+        @syll_counter = 0
+        @word_counter = 0
+        @part_counter = 0
         text
       end
 
       def part_format(text, part)
+        @part_counter += 1
+        @syll_counter = 0
+        @word_counter = 0
         text
       end
 
       def word_format(text, word)
+        @word_counter += 1
         text
       end
 
-      def syllable_format(text, syll)
+      def syllable_format(text, part, word, syll)
+        @syll_counter += 1
         text
       end
     end
 
     class PointingFormatter < Formatter
-      def syllable_format(text, syll)
-        syll.accent? ? "\\underline{#{text}}" : syll
+      def initialize(options)
+        super(options)
+        @accent_counter = 0
+      end
+
+      def part_format(text, part)
+        super(text, part)
+        @accent_counter = 0
+        text
+      end
+
+      def syllable_format(text, part, word, syll)
+        super(text, part, word, syll)
+        if syll.accent? then
+          @accent_counter += 1
+          if (part.pos == :flex and @accent_counter == 1) or
+              (part.pos == :first and @accent_counter <= @options[:accents][0]) or
+              (part.pos == :second and @accent_counter <= @options[:accents][1]) then
+            return "\\underline{#{text}}"
+          end
+        end
+
+        return syll
       end
     end
   end

@@ -72,5 +72,47 @@ laudáte eum, \underline{om}nes \underline{pó}puli:'
         :accent_style => :underline,
       }}).should eq expected
     end
+
+    it 'marks as many accents as requested' do
+      expected = 'Laudáte Dóminum, omnes \underline{Gen}tes:
+laudáte eum, omnes \underline{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :accents => [1,1],
+        :preparatory => [0,0],
+        :accent_style => :underline,
+      }}).should eq expected
+    end
+
+    it 'marks as many accents as requested (with many accents per part)' do
+      verse_text = "Lau[dá]te [Dó]mi/num, [om]nes [Gen]tes: *\n"+
+        "lau[dá]te [e]um, [om]nes [pó]pu/li:"
+      verse = @reader.load_verse(StringIO.new(verse_text))
+
+      expected = 'Laudáte Dóminum, omnes \underline{Gen}tes:
+laudáte eum, omnes \underline{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :accents => [1,1],
+        :preparatory => [0,0],
+        :accent_style => :underline,
+      }}).should eq expected
+    end
+  end
+
+  describe "splatting in the argument list" do
+    def foo(a, b, c, d)
+      return [d, c]
+    end
+
+    def bar(*args)
+      foo(0,9,*args)
+    end
+
+    it 'works as I expect' do
+      foo(1,2,*[3,4]).should eq [4, 3]
+    end
+
+    it 'works as I expect 2' do
+      bar(3,4).should eq [4, 3]
+    end
   end
 end
