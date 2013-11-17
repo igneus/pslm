@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Jakub Pavlík"]
   s.email       = 'jkb.pavlik@gmail.com'
   s.files       = Dir['lib/*.rb'] + Dir['lib/pslm/*.rb']
-  s.executables = Dir['bin/*.rb']
+  s.executables = Dir['*.rb']
   s.homepage    =
     'http://github.com/igneus/pslm'
   s.licenses    = ['LGPL-3.0', 'MIT']
