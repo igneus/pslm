@@ -48,6 +48,18 @@ laudáte eum, \underline{om}nes \underline{pó}puli:'
         :accent_style => :underline,
       }}).should eq expected
     end
+
+    it 'wraps the whole psalm in an environment' do
+      expected = '\begin{psalmus}
+Psalmus 116.
+
+Laudáte Dóminum, omnes Gentes:
+laudáte eum, omnes pópuli:
+\end{psalmus}' + "\n"
+      @outputter.process(@psalm, {
+        :wrapper => { :environment_name => 'psalmus' }
+      }).should eq expected
+    end
   end
 
   describe "#process_verse" do

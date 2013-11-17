@@ -27,6 +27,9 @@ module Pslm
         :dashes => false,
         :paragraph_space => true,
       },
+      :wrapper => {
+        :environment_name => 'psalmus'
+      }
       :lettrine => false,
       :prepend_text => nil,
       :output_append_text => nil,

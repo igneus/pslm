@@ -12,6 +12,7 @@ module Pslm
       :parts,
       :strophes,
       :lettrine,
+      :wrapper,
       :prepend_text,
       :output_append_text,
       :line_break_last_line,
@@ -29,7 +30,9 @@ module Pslm
         process_verse(verse, opts)
       end.join "\n"
 
-      return psalm.header.title + "\n\n" + psalm_assembled
+      return Formatter.format(formatters, :psalm,
+                              psalm.header.title + "\n\n" + psalm_assembled,
+                              psalm)
     end
 
     alias :process :process_psalm
@@ -231,6 +234,13 @@ module Pslm
         text +
           MARKS[@options[:marks_type]][part.pos] +
           ((@options[:novydvur_newlines] && part.pos != :second) ? "\\\\" : '') # insert two backslashes
+      end
+    end
+
+    # wraps the whole psalm in a LaTeX environment
+    class WrapperFormatter < Formatter
+      def psalm_format(text, psalm)
+        "\\begin{#{@options[:environment_name]}}\n" + text + "\n\\end{#{@options[:environment_name]}}\n"
       end
     end
   end

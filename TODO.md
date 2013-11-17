@@ -5,7 +5,7 @@
 
 * specify dependencies (normal usage / dev) in the gemspec; verify in a clean gemset
 
-* LatexOutputter: great inefficiency in creating short-term objects with the same configuration again and again
+* LatexOutputter: inefficient - creates short-term objects with the same configuration again and again
 
 ## output
 
