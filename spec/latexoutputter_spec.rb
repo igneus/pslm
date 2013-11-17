@@ -35,5 +35,17 @@ Laudáte Dóminum, omnes Gentes:
 laudáte eum, omnes pópuli:"
       @outputter.process(@psalm, {}).should eq expected
     end
+    
+    it 'marks accents' do
+      expected = 'Psalmus 116.
+
+Laudáte Dóminum, \underline{om}nes \underline{Gen}tes:
+laudáte eum, \underline{om}nes \underline{pó}puli:'
+      @outputter.process(@psalm, {:pointing => {
+        :accents => [2,2],
+        :preparatory => [0,0],
+        :accent_style => :underline,
+      }}).should eq expected
+    end
   end
 end

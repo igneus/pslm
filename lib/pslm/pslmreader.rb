@@ -4,19 +4,21 @@ module Pslm
   # reads pslm files, provides their parsed data
   class PslmReader
     
+    # public interface
+    
     def read_str(str)
-      return load(CountingIStream.new(StringIO.new(str)))
+      return load_psalm(CountingIStream.new(StringIO.new(str)))
     end
     
     def read_file(fname)
-      return load(CountingIStream.new(File.open(str)))
+      return load_psalm(CountingIStream.new(File.open(str)))
     end
     
     attr_reader :header
     
-    private
-    
-    def load(istream)
+    # the following methods may be safely used, but aren't intended to
+        
+    def load_psalm(istream)
       ps = Pslm::Psalm.new
       
       ps.header.title = gets_drop_comments istream
@@ -85,6 +87,8 @@ module Pslm
       
       return v
     end
+    
+    private
     
     # gets next line from the input stream with comments dropped;
     # lines containing only whitespace+comment are thrown away

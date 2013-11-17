@@ -19,7 +19,7 @@ module Pslm
     ]
     
     # takes a Psalm, returns a String with the psalm formatted
-    def process(psalm, opts={})
+    def process_psalm(psalm, opts={})
       options = opts
       
       formatters = []
@@ -40,8 +40,7 @@ module Pslm
           part_assembled = part.words.collect do |word|
             
             word_assembled = word.syllables.collect do |syll|              
-              # syllable format
-              syll
+              Formatter.format(formatters, :syllable, syll, syll)
             end.join ''
             
             #word_format word_assembled, word
@@ -53,10 +52,11 @@ module Pslm
         #verse_format verse_assembled, verse
         
       end.join "\n"
-      p psalm_assembled
       
       return psalm.header.title + "\n\n" + psalm_assembled
     end
+    
+    alias :process :process_psalm
     
     # takes a Symbol - name of a configuration option, and option/s value;
     # returns an instance of a corresponding Formatter class or nil 
@@ -72,15 +72,49 @@ module Pslm
       end
     end
     
-    # abstract superclass of the formatters
+    # abstract superclass of the formatters providing dumb implementation
+    # of all formatting methods
     class Formatter
+      
+      class << self
+        # lets all the :formatters: subsequently format :text: assembled from :obj: on the assembly :level:
+        def format(formatters, level, text, obj)
+          formatters.each do |f|
+            text = f.send("#{level}_format", text, obj)
+          end
+          return text
+        end
+      end
+      
       def initialize(options)
         @options = options
+      end
+      
+      def psalm_format(text, psalm)
+        text
+      end
+      
+      def verse_format(text, verse)
+        text
+      end
+      
+      def part_format(text, part)
+        text
+      end
+      
+      def word_format(text, word)
+        text
+      end
+      
+      def syllable_format(text, syll)
+        text
       end
     end
     
     class PointingFormatter < Formatter
-      
+      def syllable_format(text, syll)
+        syll.accent? ? "\\underline{#{text}}" : syll
+      end
     end
   end
 end
