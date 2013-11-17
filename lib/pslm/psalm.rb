@@ -18,6 +18,15 @@ class Pslm::Psalm
     self.header == ps2.header && self.verses == ps2.verses
   end
 
+  # returns a new Psalm containing verses of the second appended to the verses
+  # of the first; everything else is copied from the first
+  # (title etc. of the second Psalm get lost)
+  def +(ps2)
+    ps_res = self.dup
+    ps_res.verses.concat ps2.verses
+    return ps_res
+  end
+
   class Verse
     def initialize(flex=nil, first=nil, second=nil)
       @flex = flex
