@@ -60,6 +60,27 @@ laudáte eum, omnes pópuli:
         :wrapper => { :environment_name => 'psalmus' }
       }).should eq expected
     end
+
+    it 'paragraphifies verses' do
+      full_text = "Psalmus 116.
+
+Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
+lau/dá/te e/um, [om]nes [pó]pu/li:
+Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+      full_psalm = @reader.read_str(full_text)
+
+      expected = "Psalmus 116.
+
+Laudáte Dóminum, omnes Gentes:
+laudáte eum, omnes pópuli:
+
+Quóniam confirmáta est super nos misericórdia ejus:
+et véritas Dómini manet in ætérnum."
+      @outputter.process(full_psalm, {
+        :verses => { :paragraphify => true }
+      }).should eq expected
+    end
   end
 
   describe "#process_verse" do

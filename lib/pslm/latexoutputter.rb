@@ -10,6 +10,7 @@ module Pslm
       :pointing,
       :break_hints,
       :parts,
+      :verses,
       :strophes,
       :lettrine,
       :wrapper,
@@ -27,7 +28,7 @@ module Pslm
       # build the output; on each step apply the appropriate method
       # of each formatter in the given order
       psalm_assembled = psalm.verses.collect do |verse|
-        process_verse(verse, opts)
+        process_verse(verse, opts, psalm)
       end.join "\n"
 
       return Formatter.format(formatters, :psalm,
@@ -37,7 +38,7 @@ module Pslm
 
     alias :process :process_psalm
 
-    def process_verse(verse, opts)
+    def process_verse(verse, opts, psalm=nil)
       formatters = get_formatters(opts)
 
       verse_assembled = verse.parts.collect do |part|
@@ -58,7 +59,7 @@ module Pslm
       end.join "\n"
 
       return Formatter.format(formatters, :verse,
-                              verse_assembled, verse)
+                              verse_assembled, psalm, verse)
     end
 
     # takes a Hash of options,
@@ -115,7 +116,7 @@ module Pslm
         text
       end
 
-      def verse_format(text, verse)
+      def verse_format(text, psalm, verse)
         @verse_counter += 1
         @syll_counter = 0
         @word_counter = 0
@@ -247,6 +248,13 @@ module Pslm
     class WrapperFormatter < Formatter
       def psalm_format(text, psalm)
         "\\begin{#{@options[:environment_name]}}\n" + text + "\n\\end{#{@options[:environment_name]}}\n"
+      end
+    end
+
+    # inserts a newline between verses
+    class VersesFormatter < Formatter
+      def verse_format(text, psalm, verse)
+        verse != psalm.verses.last ? text + "\n" : text
       end
     end
   end

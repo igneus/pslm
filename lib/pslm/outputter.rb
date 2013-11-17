@@ -21,6 +21,9 @@ module Pslm
         :marks_type => :simple, # :simple|:semantic|:no
         :novydvur_newlines => false,
       },
+      :verses => {
+        :paragraphify => true
+      }
       :strophes => {
         :dashes => false,
         :paragraph_space => true,
