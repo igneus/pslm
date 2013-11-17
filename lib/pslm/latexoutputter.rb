@@ -8,6 +8,7 @@ module Pslm
     FORMATTER_ORDER = [
       :title,
       :pointing,
+      :break_hints,
       :verses,
       :strophes,
       :lettrine,
@@ -201,6 +202,17 @@ module Pslm
           @options[:preparatory][0]
         when :second
           @options[:preparatory][1]
+        end
+      end
+    end
+
+    class BreakHintsFormatter < Formatter
+
+      def syllable_format(text, part, word, syll)
+        if syll != word.syllables.last then
+          return text + '\-'
+        else
+          return text
         end
       end
     end

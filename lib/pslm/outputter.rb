@@ -3,10 +3,10 @@
 require "forwardable"
 
 module Pslm
-  
+
   # abstract superclass of all outputters
   class Outputter
-    
+
     DEFAULT_SETUP = {
       :no_formatting => false,
       :title => {
@@ -18,6 +18,7 @@ module Pslm
         :preparatory => [0,0],
         :accent_style => :underline,
       },
+      :break_hints => true,
       :verses => {
         :novydvur_newlines => false,
       },
@@ -32,10 +33,10 @@ module Pslm
       :guillemets => false,
       :mark_short_verses => false
     }
-    
+
     def process(psalm, options={})
       raise RuntimeError.new "Abstract class. Method not implemented."
-    end    
-    
+    end
+
   end
 end

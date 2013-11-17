@@ -126,7 +126,17 @@ laudáte \textit{eum, omnes} \underline{pó}puli:'
         :accent_style => :underline,
       }}).should eq expected
     end
+
+    it 'inserts break-hints' do
+      expected = 'Lau\-dá\-te Dó\-mi\-num, om\-nes \underline{Gen}\-tes:
+lau\-dá\-te e\-um, om\-nes \underline{pó}\-pu\-li:'
+      @outputter.process_verse(@verse, {
+        :pointing => {
+          :accents => [1,1],
+          :preparatory => [0,0],
+          :accent_style => :underline,},
+        :break_hints => true
+      }).should eq expected
+    end
   end
-
-
 end
