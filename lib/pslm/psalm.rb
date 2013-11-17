@@ -13,6 +13,10 @@ class Pslm::Psalm
   
   attr_reader :header, :verses
   
+  def ==(ps2)
+    self.header == ps2.header && self.verses == ps2.verses
+  end
+  
   class Verse
     def initialize(flex=nil, first=nil, second=nil)
       @flex = flex
@@ -29,6 +33,16 @@ class Pslm::Psalm
       r = [@first, @second]
       r.unshift @flex if @flex
       return r
+    end
+    
+    def ==(v2)
+      [:flex, :first, :second].each do |part|
+        if self.send(part) != v2.send(part) then
+          return false
+        end
+      end
+      
+      return true
     end
   end
   
@@ -47,6 +61,10 @@ class Pslm::Psalm
     
     # position in the verse - one of :flex, :first, :second
     attr_reader :pos
+    
+    def ==(p2)
+      self.words == p2.words
+    end
   end
   
   class Word
@@ -55,6 +73,10 @@ class Pslm::Psalm
     end
     
     attr_reader :syllables
+    
+    def ==(w2)
+      self.syllables == w2.syllables
+    end
   end
   
   class Syllable < String
@@ -65,6 +87,15 @@ class Pslm::Psalm
             
     def accent?
       @accent
+    end
+    
+    def ==(s2)
+      (self.to_s == s2.to_s) and (self.accent? == s2.accent?) 
+    end
+    
+    def inspect
+      accent = @accent ? ' accent' : ''
+      return '#' + "<#{self.class}:#{self.object_id} \"#{self}\"#{accent}>"
     end
   end
 end

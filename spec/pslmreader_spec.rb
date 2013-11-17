@@ -57,5 +57,27 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       first_part.words[3].syllables[0].accent?.should eq true
       first_part.words[3].syllables[1].accent?.should eq false
     end
+    
+    it 'drops comments in the psalm text' do
+      psalm_text_with_comments = "Psalmus 116.
+
+# The shortest psalm of the Psalter.
+Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: * # Praise the Lord, all nations
+lau/dá/te e/um, [om]nes [pó]pu/li:
+Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+      @reader.read_str(psalm_text_with_comments).should == @psalm
+    end
+    
+    it 'drops comments in the header' do
+      psalm_text_with_comments = "Psalmus 116.
+# The shortest psalm of the Psalter.
+
+Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: * # Praise the Lord, all nations
+lau/dá/te e/um, [om]nes [pó]pu/li:
+Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+      @reader.read_str(psalm_text_with_comments).should == @psalm
+    end
   end
 end

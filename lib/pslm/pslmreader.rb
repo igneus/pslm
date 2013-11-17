@@ -19,8 +19,8 @@ module Pslm
     def load(istream)
       ps = Pslm::Psalm.new
       
-      ps.header.title = istream.gets.strip
-      istream.gets # skip empty line
+      ps.header.title = gets_drop_comments istream
+      gets_drop_comments istream # skip empty line
       
       while v = load_verse(istream) do
         ps.verses << v
@@ -38,7 +38,7 @@ module Pslm
     
     def load_verse(istream)
       v = Psalm::Verse.new do |verse|
-        part_loaded = load_verse_part istream
+        part_loaded = gets_drop_comments istream
         VERSE_PARTS.each_with_index do |part, i|
           if part_loaded == nil then
             return part_loaded # eof
@@ -46,10 +46,10 @@ module Pslm
           
           unless part_loaded =~ part[:regex]
             if part[:name] == :flex then
-              next # probably a verse without flex
+              next # probably a verse without flex - try to read the loaded line as a first half-verse
             end
             
-            raise PslmSyntaxError.new("Unexpected verse part on line #{istream.lineno}. Expecting #{part[:name]}")
+            raise PslmSyntaxError.new("Unexpected verse part on line #{istream.lineno}: \"#{part_loaded}\" Expecting #{part[:name]}")
           end
           
           part_src = part_loaded.dup
@@ -78,7 +78,7 @@ module Pslm
           verse.send(part[:method], words)
           
           unless part[:name] == :second
-            part_loaded = load_verse_part istream
+            part_loaded = gets_drop_comments istream
           end
         end
       end
@@ -86,7 +86,9 @@ module Pslm
       return v
     end
     
-    def load_verse_part(istream)
+    # gets next line from the input stream with comments dropped;
+    # lines containing only whitespace+comment are thrown away
+    def gets_drop_comments(istream)
       l = istream.gets
       if l == nil then
         return l # eof
@@ -97,13 +99,21 @@ module Pslm
         return l # strophe end
       end
       
-      return strip_comments(l)
+      l = strip_comments(l)
+      if l == '' then
+        # line containing only a comment; try another one
+        return gets_drop_comments(istream)
+      end
+      
+      return l
     end
     
     # anything from # to the end of line is a comment
     def strip_comments(s)
       ci = s.index('#')
-      if ci != nil then
+      if ci == 0 then
+        return ''
+      elsif ci != nil then
         return s[0..ci-1].strip
       else
         return s
