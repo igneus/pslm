@@ -25,3 +25,4 @@
 ## output
 * notated (single line of notes, text aligned beneath) - LilyPond
 * html
+* latex: easy (no command definitions necessary) and semantic (\accent instead of \underline etc.) mode

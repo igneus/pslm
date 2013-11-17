@@ -7,15 +7,12 @@ describe Pslm::LatexOutputter do
     @psalm_text = "Psalmus 116.
 
 Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
-lau/dá/te e/um, [om]nes [pó]pu/li:
-Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
-et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+lau/dá/te e/um, [om]nes [pó]pu/li:"
+    # yes, I cheat - I deleted the second line to make the psalm shorter :)
+
     @reader = Pslm::PslmReader.new()
     @psalm = @reader.read_str(@psalm_text)
     @outputter = Pslm::LatexOutputter.new
-  end
-  
-  describe "#read_str" do
   end
   
   describe "#get_outputter" do
@@ -26,6 +23,17 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
     
     it 'returns nil if there is no such formatter class' do
       @outputter.get_formatter(:cursing, {}).should eq nil
+    end
+  end
+  
+  describe "#process" do
+    
+    it 'returns just the text with no options' do
+      expected = "Psalmus 116.
+
+Laudáte Dóminum, omnes Gentes:
+laudáte eum, omnes pópuli:"
+      @outputter.process(@psalm, {}).should eq expected
     end
   end
 end
