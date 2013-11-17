@@ -16,7 +16,7 @@ module Pslm
       :pointing => {
         :accents => [2,2],
         :preparatory => [0,0],
-        :accent_style => :underline,
+        :accent_style => :underline, # :underline|:bold|:semantic
       },
       :break_hints => true,
       :parts => {

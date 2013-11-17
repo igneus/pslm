@@ -156,13 +156,19 @@ module Pslm
         text
       end
 
+      MARKS = {
+        :underline => 'underline',
+        :bold => 'textbf',
+        :semantic => 'accent'
+      }
+
       def syllable_format(text, part, word, syll)
         super(text, part, word, syll)
         r = text
         if syll.accent? then
           @accent_counter += 1
           if @accent_counter <= num_accents_for(part) then
-            r = "\\underline{#{r}}"
+            r = "\\#{MARKS[@options[:accent_style]]}{#{r}}"
           end
         end
 

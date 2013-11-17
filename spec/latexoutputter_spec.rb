@@ -139,6 +139,16 @@ laudáte \textit{eum, omnes} \underline{pó}puli:'
       }}).should eq expected
     end
 
+    it 'marks accents - bold' do
+      expected = 'Laudáte Dóminum, omnes \textbf{Gen}tes:
+laudáte eum, omnes \textbf{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :accents => [1,1],
+        :preparatory => [0,0],
+        :accent_style => :bold,
+      }}).should eq expected
+    end
+
     it 'inserts break-hints' do
       expected = 'Lau\-dá\-te Dó\-mi\-num, om\-nes \underline{Gen}\-tes:
 lau\-dá\-te e\-um, om\-nes \underline{pó}\-pu\-li:'
