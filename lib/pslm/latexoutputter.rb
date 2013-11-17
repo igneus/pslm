@@ -9,7 +9,7 @@ module Pslm
       :title,
       :pointing,
       :break_hints,
-      :verses,
+      :parts,
       :strophes,
       :lettrine,
       :prepend_text,
@@ -138,6 +138,7 @@ module Pslm
       end
     end
 
+    # marks accentuated and preparatory syllables
     class PointingFormatter < Formatter
       def initialize(options)
         super(options)
@@ -206,14 +207,30 @@ module Pslm
       end
     end
 
+    # inserts break hints between syllables
     class BreakHintsFormatter < Formatter
-
       def syllable_format(text, part, word, syll)
         if syll != word.syllables.last then
           return text + '\-'
         else
           return text
         end
+      end
+    end
+
+    # formatting of verse parts
+    class PartsFormatter < Formatter
+
+      MARKS = {
+        :simple => { :flex => '~\dag\mbox{}', :first => '~*', :second => '' },
+        :semantic => { :flex => '\flex', :first => '\asterisk', :second => '' },
+        :no => { :flex => '', :first => '', :second => '' }
+      }
+
+      def part_format(text, part)
+        text +
+          MARKS[@options[:marks_type]][part.pos] +
+          ((@options[:novydvur_newlines] && part.pos != :second) ? "\\\\" : '') # insert two backslashes
       end
     end
   end

@@ -138,5 +138,35 @@ lau\-dá\-te e\-um, om\-nes \underline{pó}\-pu\-li:'
         :break_hints => true
       }).should eq expected
     end
+
+    it 'inserts part-dividing characters: flex, asterisk' do
+      verse_text = 'Lau/da á/ni/ma me/a [Dó]mi/num, + # psalm 145
+lau/dá/bo Dó/mi/num in [vi]ta [me]a: *
+psal/lam De/o me/o [quám]di/u [fú]e/ro.'
+      expected = 'Lauda ánima mea Dóminum,~\dag\mbox{}
+laudábo Dóminum in vita mea:~*
+psallam Deo meo quámdiu fúero.'
+      verse = @reader.load_verse(StringIO.new(verse_text))
+      @outputter.process_verse(verse, {
+        :parts => {
+          :marks_type => :simple,
+          :novydvur_newlines => false,}
+      }).should eq expected
+    end
+
+    it 'breaks verse parts on separate lines' do
+      verse_text = 'Lau/da á/ni/ma me/a [Dó]mi/num, + # psalm 145
+lau/dá/bo Dó/mi/num in [vi]ta [me]a: *
+psal/lam De/o me/o [quám]di/u [fú]e/ro.'
+      expected = 'Lauda ánima mea Dóminum,\\\\
+laudábo Dóminum in vita mea:\\\\
+psallam Deo meo quámdiu fúero.'
+      verse = @reader.load_verse(StringIO.new(verse_text))
+      @outputter.process_verse(verse, {
+        :parts => {
+          :marks_type => :no,
+          :novydvur_newlines => true,}
+      }).should eq expected
+    end
   end
 end

@@ -19,7 +19,8 @@ module Pslm
         :accent_style => :underline,
       },
       :break_hints => true,
-      :verses => {
+      :parts => {
+        :marks_type => :simple, # :simple|:semantic|:no
         :novydvur_newlines => false,
       },
       :strophes => {
