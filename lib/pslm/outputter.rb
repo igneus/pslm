@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-require "forwardable"
-
 module Pslm
 
   # abstract superclass of all outputters
@@ -29,7 +27,7 @@ module Pslm
       },
       :wrapper => {
         :environment_name => 'psalmus'
-      }
+      },
       :lettrine => false,
       :prepend_text => nil,
       :output_append_text => nil,
