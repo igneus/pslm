@@ -141,26 +141,67 @@ module Pslm
       def initialize(options)
         super(options)
         @accent_counter = 0
+        @preparatories_counter = 0
       end
 
       def part_format(text, part)
         super(text, part)
         @accent_counter = 0
+        @preparatories_counter = 0
         text
       end
 
       def syllable_format(text, part, word, syll)
         super(text, part, word, syll)
+        r = text
         if syll.accent? then
           @accent_counter += 1
-          if (part.pos == :flex and @accent_counter == 1) or
-              (part.pos == :first and @accent_counter <= @options[:accents][0]) or
-              (part.pos == :second and @accent_counter <= @options[:accents][1]) then
-            return "\\underline{#{text}}"
+          if @accent_counter <= num_accents_for(part) then
+            r = "\\underline{#{r}}"
           end
         end
 
-        return syll
+        if num_preparatory_syllables_for(part) > 0 and
+            @accent_counter >= num_accents_for(part) then
+
+          if @accent_counter == num_accents_for(part) and
+              @preparatories_counter == 1 then
+            r = r + "}"
+          end
+          if @preparatories_counter == num_preparatory_syllables_for(part) then
+            r = '\textit{' + r
+          end
+
+          @preparatories_counter += 1
+        end
+
+        return r
+      end
+
+      private
+
+      # how many accents to mark in this verse-part?
+      def num_accents_for(part)
+        case part.pos
+        when :flex
+          1
+        when :first
+          @options[:accents][0]
+        when :second
+          @options[:accents][1]
+        end
+      end
+
+      # how many preparatory syllables to mark in this verse-part?
+      def num_preparatory_syllables_for(part)
+        case part.pos
+        when :flex
+          0
+        when :first
+          @options[:preparatory][0]
+        when :second
+          @options[:preparatory][1]
+        end
       end
     end
   end

@@ -96,23 +96,37 @@ laudáte eum, omnes \underline{pó}puli:'
         :accent_style => :underline,
       }}).should eq expected
     end
+
+    it 'marks preparatory two syllables' do
+      expected = 'Laudáte Dóminum, \textit{omnes} \underline{Gen}tes:
+laudáte eum, \textit{omnes} \underline{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :accents => [1,1],
+        :preparatory => [2,2],
+        :accent_style => :underline,
+      }}).should eq expected
+    end
+
+    it 'marks one preparatory syllable' do
+      expected = 'Laudáte Dóminum, om\textit{nes} \underline{Gen}tes:
+laudáte eum, om\textit{nes} \underline{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :accents => [1,1],
+        :preparatory => [1,1],
+        :accent_style => :underline,
+      }}).should eq expected
+    end
+
+    it 'marks preparatory syllables with word boundaries inbetween' do
+      expected = 'Laudáte Dómi\textit{num, omnes} \underline{Gen}tes:
+laudáte \textit{eum, omnes} \underline{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :accents => [1,1],
+        :preparatory => [3,4],
+        :accent_style => :underline,
+      }}).should eq expected
+    end
   end
 
-  describe "splatting in the argument list" do
-    def foo(a, b, c, d)
-      return [d, c]
-    end
 
-    def bar(*args)
-      foo(0,9,*args)
-    end
-
-    it 'works as I expect' do
-      foo(1,2,*[3,4]).should eq [4, 3]
-    end
-
-    it 'works as I expect 2' do
-      bar(3,4).should eq [4, 3]
-    end
-  end
 end
