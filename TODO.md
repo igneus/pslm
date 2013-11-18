@@ -11,6 +11,8 @@
   - must provide shortcut options for a few most common setups
   - should detect presence/absence of a psalm title correctly and just warn if the options don't correspond
   	(but there must be an option to suppress this "clever" behaviour)
+  - it should be possible to specify the pattern either numerically (x accents, y preparatories) or by a psalm tone code (I.g) +
+  	optionally reference book (like --standard solesmes1933 --tone I.g3)
 
 ## output
 

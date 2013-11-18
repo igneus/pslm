@@ -3,7 +3,7 @@
 module Pslm
 
   # formats a psalm for LaTeX
-  class LatexOutputter
+  class LatexOutputter < Outputter
 
     FORMATTER_ORDER = [
       :pointing,
@@ -95,7 +95,6 @@ module Pslm
         # lets all the :formatters: subsequently format :text: assembled from :obj: on the assembly :level:
         def format(formatters, level, text, *args)
           formatters.each do |f|
-            p f.class if level == :verse
             text = f.send("#{level}_format", text, *args)
           end
           return text
@@ -276,8 +275,6 @@ module Pslm
       def verse_format(text, psalm, verse)
         #super(text, psalm, verse)
         @verse_counter += 1
-        p @verse_counter
-        p text
         if @verse_counter <= @skip_verses then
           return ""
         end
