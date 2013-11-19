@@ -1,4 +1,5 @@
 require 'stringio'
+require 'delegate'
 
 module Pslm
   # reads pslm files, provides their parsed data
@@ -6,25 +7,24 @@ module Pslm
 
     # public interface
 
-    def read_str(str, has_title=true)
-      return load_psalm(CountingIStream.new(StringIO.new(str)), has_title)
+    def read_str(str, has_title=true, autodetect=true)
+      return load_psalm(CountingIStream.new(StringIO.new(str)), has_title, autodetect)
     end
 
-    def read_file(fname, has_title=true)
-      return load_psalm(CountingIStream.new(File.open(str)), has_title)
+    def read_file(fname, has_title=true, autodetect=true)
+      return load_psalm(CountingIStream.new(File.open(str)), has_title, autodetect)
     end
 
     attr_reader :header
 
     # the following methods may be safely used, but aren't intended to
 
-    def load_psalm(istream, has_title=true)
+    # has_title - does the psalm text begin with a title line and an empty line?
+    # autodetect - check if there really is a title to prevent wrong interpretation
+    def load_psalm(istream, has_title=true, autodetect=true)
       ps = Pslm::Psalm.new
 
-      if has_title then
-        ps.header.title = gets_drop_comments istream
-        gets_drop_comments istream # skip empty line
-      end
+      ps.header.title = load_title(istream, has_title, autodetect)
 
       while v = load_verse(istream) do
         ps.verses << v
@@ -92,6 +92,37 @@ module Pslm
 
     private
 
+    # loads psalm title;
+    # unless autodetect is false, a check is always done, if there is any title to load
+    def load_title(istream, has_title, autodetect)
+      if not autodetect and not has_title then
+        return ''
+      end
+
+      title = gets_drop_comments istream
+      after_title = gets_drop_comments istream
+
+      unless autodetect then
+        return title
+      end
+
+      # TODO real logging, not direct output to STDERR
+      if after_title =~ /^\s*$/ then
+        if not has_title then
+          STDERR.puts "The psalm shouldn't have a title, but it has one."
+        end
+      else
+        title = ''
+        istream.rewind
+
+        if has_title then
+          STDERR.puts "The psalm should have a title, but none was found."
+        end
+      end
+
+      return title
+    end
+
     # gets next line from the input stream with comments dropped;
     # lines containing only whitespace+comment are thrown away
     def gets_drop_comments(istream)
@@ -133,9 +164,10 @@ module Pslm
   end
 
   # wraps an input stream; counts lines read
-  class CountingIStream
+  class CountingIStream < SimpleDelegator
 
     def initialize(stream)
+      super(stream)
       @stream = stream
       @lineno = 0
     end
@@ -146,6 +178,11 @@ module Pslm
       l = @stream.gets
       @lineno += 1 if l != nil
       return l
+    end
+
+    def rewind
+      @lineno = 0
+      super
     end
   end
 

@@ -4,14 +4,21 @@ require 'spec_helper'
 
 describe Pslm::PslmReader do
   before :each do
+    @reader = Pslm::PslmReader.new()
+
     @psalm_text = "Psalmus 116.
 
 Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
 lau/dá/te e/um, [om]nes [pó]pu/li:
 Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
 et véritas Dó/mi/ni ma/net [in] æ[tér]num."
-    @reader = Pslm::PslmReader.new()
     @psalm = @reader.read_str(@psalm_text)
+
+    # psalm text without title
+    @bare_text = 'Gló/ri/a [Pat]ri et [Fí]lio, *
+et Spi[rí]tu/i [San]cto.
+Sicut erat in prin/cí/pio, et [nunc] et [sem]per, *
+et in sǽ/cu/la sæ/cu[ló]rum. [A]men.'
   end
 
   describe "#read_str" do
@@ -81,13 +88,31 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
     end
 
     it 'is able to read psalm without a title' do
-      bare_text = 'Gló/ri/a [Pat]ri et [Fí]lio, *
-et Spi[rí]tu/i [San]cto.
-Sicut erat in prin/cí/pio, et [nunc] et [sem]per, *
-et in sǽ/cu/la sæ/cu[ló]rum. [A]men.'
-      psalm = @reader.read_str(bare_text, false)
+      psalm = @reader.read_str(@bare_text, false)
       psalm.verses.size.should eq 2
       psalm.header.title.should eq ''
+    end
+
+    it 'autodetects title' do
+      psalm = @reader.read_str(@psalm_text, false)
+      psalm.verses.size.should eq 2
+    end
+
+    it 'autodetects missing title' do
+      psalm = @reader.read_str(@bare_text, true)
+      psalm.verses.size.should eq 2
+    end
+
+    it 'may be forced not to autodetect title' do
+      expect do
+        psalm = @reader.read_str(@psalm_text, false, false)
+        psalm.verses.size.should eq 2
+      end.to raise_error(Pslm::PslmReader::PslmSyntaxError)
+    end
+
+    it 'may be forced not to autodetect missing title' do
+      psalm = @reader.read_str(@bare_text, true, false)
+      psalm.verses.size.should eq 1 # the first verse will be (mis)interpreted as title+empty line
     end
   end
 end
