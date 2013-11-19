@@ -7,6 +7,8 @@
 * specify dependencies (normal usage / dev) in the gemspec; verify in a clean gemset
 
 * the CLI
+  - custom title template
+
   - psalm input: file, stdin
   - must do something useful even without any options (just point 2,2 accents?)
   - must provide shortcut options for a few most common setups
@@ -14,6 +16,7 @@
   	(but there must be an option to suppress this "clever" behaviour)
   - it should be possible to specify the pattern either numerically (x accents, y preparatories) or by a psalm tone code (I.g) +
   	optionally reference book (like --standard solesmes1933 --tone I.g3)
+  - the --help should enumerate options where possible (format, pointing style, ...)
 
 * rename Outputters to Pointers or sim. - there will be also other kinds of output than a pointed text
 
