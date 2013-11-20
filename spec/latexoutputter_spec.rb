@@ -191,6 +191,17 @@ lau\-dá\-te e\-um, om\-nes \underline{pó}\-pu\-li:'
       }).should eq expected
     end
 
+    it "doesn't insert break hint at the end of a word before interpunction" do
+      verse_text = 'Non mó/ri[ar], sed [vi]vam: *
+et nar/rá/bo [ó]pe/ra [Dó]mini.'
+      expected = 'Non mó\-ri\-ar, sed vi\-vam:
+et nar\-rá\-bo ó\-pe\-ra Dó\-mini.'
+      verse = @reader.load_verse(StringIO.new(verse_text))
+      @outputter.process_verse(verse, {
+        :break_hints => true
+      }).should eq expected
+    end
+
     it 'inserts part-dividing characters: flex, asterisk' do
       verse_text = 'Lau/da á/ni/ma me/a [Dó]mi/num, + # psalm 145
 lau/dá/bo Dó/mi/num in [vi]ta [me]a: *

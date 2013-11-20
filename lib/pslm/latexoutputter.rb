@@ -221,7 +221,8 @@ module Pslm
     # inserts break hints between syllables
     class BreakHintsFormatter < Formatter
       def syllable_format(text, part, word, syll)
-        if syll != word.syllables.last then
+        unless syll == word.syllables.last or
+            (word.syllables.size >= 2 and syll == word.syllables[-2] and word.syllables[-1] =~ /^[\.,!?]+$/)
           return text + '\-'
         else
           return text
