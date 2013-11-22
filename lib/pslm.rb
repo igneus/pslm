@@ -6,6 +6,7 @@ end
 require_relative 'pslm/pslmreader'
 require_relative 'pslm/psalm'
 require_relative 'pslm/psalmpointer'
+require_relative 'pslm/psalmpatterns'
 
 require_relative 'pslm/outputter'
 require_relative 'pslm/latexoutputter'
