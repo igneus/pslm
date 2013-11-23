@@ -33,6 +33,10 @@ optparse = OptionParser.new do |opts|
     setup[:general][:output_file] = out
   end
 
+  opts.on "-f", "--format F", "Select output format." do |f|
+    setup[:general][:format] = f
+  end
+
   opts.separator "== Input interpretation"
 
   opts.on "--no-title", "Don't consider the first line to contain a psalm title" do
