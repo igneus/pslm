@@ -1,7 +1,10 @@
+# -*- coding: utf-8 -*-
 # pslm - psalm processing utility
 
 require 'pslm'
 require 'optparse'
+
+require 'pslm/structuredsetup'
 
 DEFAULT_SETUP = {
   :general => {
@@ -15,7 +18,10 @@ DEFAULT_SETUP = {
   :output => Pslm::Outputter::DEFAULT_SETUP.dup
 }
 
-setup = DEFAULT_SETUP.dup
+setup = StructuredSetup.new DEFAULT_SETUP
+[:accents, :preparatory].each do |o|
+  setup[:output][:pointing].delete o
+end
 
 # TODO the setup below doesn't yet respect the structure of the options above
 # TODO many of the options aren't implemented yet, some will never be
@@ -32,7 +38,7 @@ optparse = OptionParser.new do |opts|
   opts.on "--no-title", "Don't consider the first line to contain a psalm title" do
     setup[:input][:has_title] = false
   end
-  opts.on "-a", "--append TEXT", "Text to be appended at the end (before processing)." do |t|
+  opts.on "--append TEXT", "Text to be appended at the end (before processing)." do |t|
     setup[:input][:append_text] = t
   end
   opts.on "-j", "--join", "Join all given input files" do
@@ -55,25 +61,30 @@ optparse = OptionParser.new do |opts|
   opts.on "--no-formatting", "Just process accents and don't do anything else with the document" do
     setup[:output][:no_formatting] = true
   end
-  opts.on "-c", "--accents NUMS", "a:b - Numbers of accents to be pointed in each half-verse" do |str|
+
+  opts.on "-a", "--accents NUMS", "a:b - Numbers of accents to be pointed in each half-verse" do |str|
     a1, a2 = str.split ':'
     if a1 && a1 != "" then
-      setup[:output][:pointing][:accents][0] = a1.to_i
+      setup.get_dv(:output, :pointing, :accents, [])[0] = a1.to_i
     end
     if a2 && a2 != "" then
-      setup[:output][:pointing][:accents][1] = a2.to_i
+      setup.get_dv(:output, :pointing, :accents, [])[1] = a2.to_i
     end
   end
   # TODO merge with the previous option to a1[,p1]:a2[,p2]
   opts.on "-p", "--preparatory-syllables NUMS", "a:b - How many preparatory syllables in each half-verse" do |str|
     a1, a2 = str.split ':'
     if a1 && a1 != "" then
-      setup[:output][:pointing][:preparatory][0] = a1.to_i
+      setup.get_dv(:output, :pointing, :preparatory, [])[0] = a1.to_i
     end
     if a2 && a2 != "" then
-      setup[:output][:pointing][:preparatory][1] = a2.to_i
+      setup.get_dv(:output, :pointing, :preparatory, [])[1] = a2.to_i
     end
   end
+  opts.on "-t", "--tone TONE", "point accents and preparatory syllables for a given psalm tone (like I.f or VIII.G)" do |str|
+    setup[:output][:pointing][:tone] = str
+  end
+
   opts.on "-s", "--accents-style SYM", "underline (default) | bold" do |s|
     sym = s.to_sym
     setup[:output][:pointing][:accent_style] = sym
@@ -119,6 +130,15 @@ optparse = OptionParser.new do |opts|
 end
 
 optparse.parse!
+
+# use default pointing setup if necessary
+unless setup[:output][:pointing].has_key? :tone
+  [:accents, :preparatory].each do |o|
+    unless setup[:output][:pointing].has_key? o
+      setup[:output][:pointing][o] = DEFAULT_SETUP[:output][:pointing][o].dup
+    end
+  end
+end
 
 if ARGV.empty? then
   raise "Program expects filenames as arguments."

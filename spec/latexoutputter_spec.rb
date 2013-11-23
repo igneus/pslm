@@ -179,6 +179,15 @@ laudáte eum, omnes \textbf{pó}puli:'
       }}).should eq expected
     end
 
+    it 'marks accents and preparatory syllables for a specified psalm tone' do
+      expected = 'Laudáte Dóminum, \textbf{om}nes \textbf{Gen}tes:
+laudáte eum, \textit{omnes} \textbf{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :tone => 'I.f',
+        :accent_style => :bold,
+      }}).should eq expected
+    end
+
     it 'inserts break-hints' do
       expected = 'Lau\-dá\-te Dó\-mi\-num, om\-nes \underline{Gen}\-tes:
 lau\-dá\-te e\-um, om\-nes \underline{pó}\-pu\-li:'

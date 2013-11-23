@@ -149,6 +149,19 @@ module Pslm
         super(options)
         @accent_counter = 0
         @preparatories_counter = 0
+
+        # validate options
+        if @options.has_key? :tone and
+            (@options.has_key? :accents or @options.has_key? :preparatory) then
+          raise RuntimeError.new('Overconfigured: both accents/preparatories number and psalm tone specified.')
+        elsif @options.has_key? :accents then
+          # ok, nothing to do
+        elsif @options.has_key? :tone
+          # convert psalm tone identifier to numbers
+          tone = PsalmPatterns.default.tone_data_str(@options[:tone])
+          @options[:accents] = tone.collect {|part| part[0] }
+          @options[:preparatory] = tone.collect {|part| part[1] }
+        end
       end
 
       def part_format(text, part)

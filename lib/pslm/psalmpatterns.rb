@@ -56,7 +56,8 @@ module Pslm
 
     # returns [tone, difference]
     def normalize_tone_str(str)
-      nil
+      tone, sep, difference = str.rpartition(/[\.\s]/)
+      return [tone, difference]
     end
 
     # returns tone data in a data structure containing Hashes
