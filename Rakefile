@@ -2,7 +2,8 @@ require 'rspec/core/rake_task'
 
 RSpec::Core::RakeTask.new(:spec)
 
-file 'pslm-0.0.0.gem' => Dir['bin/*.rb']+Dir['lib/*.rb']+Dir['lib/pslm/*.rb'] do
+file 'pslm-0.0.0.gem' => ['pslm.gemspec'] +
+                          Dir['bin/*.rb']+Dir['lib/*.rb']+Dir['lib/pslm/*.rb'] do
   `gem build pslm.gemspec`
 end
 

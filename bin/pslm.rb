@@ -1,3 +1,4 @@
+#!/usr/bin/env/ruby
 # -*- coding: utf-8 -*-
 # pslm - psalm processing utility
 

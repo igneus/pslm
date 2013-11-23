@@ -7,8 +7,13 @@ Gem::Specification.new do |s|
   s.authors     = ["Jakub Pavlík"]
   s.email       = 'jkb.pavlik@gmail.com'
   s.files       = Dir['lib/*.rb'] + Dir['lib/pslm/*.rb']
-  s.executables = Dir['*.rb']
+  s.executables = ['pslm.rb']
   s.homepage    =
     'http://github.com/igneus/pslm'
   s.licenses    = ['LGPL-3.0', 'MIT']
+
+  s.add_runtime_dependency 'colorize'
+
+  s.add_development_dependency "rspec"
+  s.add_development_dependency "rake"
 end
