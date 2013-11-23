@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.summary     = "plain text psalm format formatter utility and library"
   s.authors     = ["Jakub Pavlík"]
   s.email       = 'jkb.pavlik@gmail.com'
-  s.files       = Dir['lib/*.rb'] + Dir['lib/pslm/*.rb']
+  s.files       = Dir['lib/*.rb'] + Dir['lib/pslm/*.rb'] + Dir['lib/pslm/psalmtones/*.yml']
   s.executables = ['pslm.rb']
   s.homepage    =
     'http://github.com/igneus/pslm'
