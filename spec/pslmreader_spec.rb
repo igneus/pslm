@@ -114,5 +114,18 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       psalm = @reader.read_str(@bare_text, true, false)
       psalm.verses.size.should eq 1 # the first verse will be (mis)interpreted as title+empty line
     end
+
+    it 'skips empty lines between verses' do
+      # later the empty lines will be parsed as strophe delimiters,
+      # but for now we ignore them
+      psalm_text = "Psalmus 116.
+
+Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
+lau/dá/te e/um, [om]nes [pó]pu/li:
+
+Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+      @reader.read_str(psalm_text).should eq @psalm
+    end
   end
 end

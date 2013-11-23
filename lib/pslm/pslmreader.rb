@@ -48,6 +48,12 @@ module Pslm
             return part_loaded # eof
           end
 
+          # later the empty lines will be parsed as strophe delimiters,
+          # but for now we ignore them
+          while part_loaded =~ /^\s*$/ do
+            part_loaded = gets_drop_comments istream
+          end
+
           unless part_loaded =~ part[:regex]
             if part[:name] == :flex then
               next # probably a verse without flex - try to read the loaded line as a first half-verse
