@@ -29,7 +29,7 @@ optparse = OptionParser.new do |opts|
 
   opts.separator "== Input interpretation"
 
-  opts.on "-t", "--no-title", "Don't consider the first line to contain a psalm title" do
+  opts.on "--no-title", "Don't consider the first line to contain a psalm title" do
     setup[:input][:has_title] = false
   end
   opts.on "-a", "--append TEXT", "Text to be appended at the end (before processing)." do |t|
@@ -41,18 +41,18 @@ optparse = OptionParser.new do |opts|
 
   opts.separator "== Output formatting"
 
-  opts.on "-q", "--skip-title", "Don't set the title" do
+  opts.on "--skip-title", "Don't set the title" do
     setup[:output][:title][:template] = :no
   end
   # TODO
-  opts.on "-T", "--title-template [TEMPLATE]", "Use a specified template instead of the default one." do |p|
+  opts.on "--title-template [TEMPLATE]", "Use a specified template instead of the default one." do |p|
     setup[:output][:title_pattern] = p
   end
   opts.on "-k", "--skip-verses NUM", Integer, "Skip initial verses" do |i|
     setup[:output][:skip_verses] = i
   end
   # TODO
-  opts.on "-f", "--no-formatting", "Just process accents and don't do anything else with the document" do
+  opts.on "--no-formatting", "Just process accents and don't do anything else with the document" do
     setup[:output][:no_formatting] = true
   end
   opts.on "-c", "--accents NUMS", "a:b - Numbers of accents to be pointed in each half-verse" do |str|
@@ -65,7 +65,7 @@ optparse = OptionParser.new do |opts|
     end
   end
   # TODO merge with the previous option to a1[,p1]:a2[,p2]
-  opts.on "-P", "--preparatory-syllables NUMS", "a:b - How many preparatory syllables in each half-verse" do |str|
+  opts.on "-p", "--preparatory-syllables NUMS", "a:b - How many preparatory syllables in each half-verse" do |str|
     a1, a2 = str.split ':'
     if a1 && a1 != "" then
       setup[:output][:pointing][:preparatory][0] = a1.to_i
@@ -80,14 +80,14 @@ optparse = OptionParser.new do |opts|
   end
   # Needs LaTeX package lettrine!
   # TODO
-  opts.on "-l", "--lettrine", "Large first character of the psalm." do
+  opts.on "--lettrine", "Large first character of the psalm." do
     setup[:output][:lettrine] = true
   end
-  opts.on "-S", "--split-verses", "Each verse part on it's own line" do
+  opts.on "--split-verses", "Each verse part on it's own line" do
     setup[:output][:parts][:novydvur_newlines] = true # like in the psalter of the Novy Dvur Trappist abbey
   end
   # TODO
-  opts.on "-p", "--pretitle TEXT", "Text to be printed as beginning of the title." do |t|
+  opts.on "--pretitle TEXT", "Text to be printed as beginning of the title." do |t|
     setup[:output][:prepend_text] = t
   end
   # TODO
@@ -97,19 +97,19 @@ optparse = OptionParser.new do |opts|
   # This is useful when we want to append a doxology after the psalm
   # as a separate paragraph
   # TODO
-  opts.on "-e", "--linebreak-at-the-end", "Make a line-break after the last line" do
+  opts.on "--linebreak-at-the-end", "Make a line-break after the last line" do
     setup[:output][:line_break_last_line] = true
   end
   # TODO
-  opts.on "-d", "--dashes", "Dash at the end of each psalm paragraph" do
+  opts.on "--dashes", "Dash at the end of each psalm paragraph" do
     setup[:output][:dashes] = true
   end
   # TODO
-  opts.on "-h", "--no-paragraph", "No empty line after each psalm paragraph." do
+  opts.on "--no-paragraph", "No empty line after each psalm paragraph." do
     setup[:output][:paragraph_space] = false
   end
   # TODO
-  opts.on "-g", "--guillemets", "Convert american quotes to french ones (guillemets)." do
+  opts.on "--guillemets", "Convert american quotes to french ones (guillemets)." do
     setup[:output][:guillemets] = true
   end
   # TODO
