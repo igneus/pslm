@@ -1,7 +1,7 @@
 # according to Liber Usualis, Solesmes cca 1962
 ---
 I: [[2, 0], [1, 2]]
-II: [[1, 0], [1, 2]]
+II: [[1, 0], [1, 1]]
 III: [
   [2, 0],
   [1, {b: 1, a: 1, a2: 2, g: 2, g2: 3}]
