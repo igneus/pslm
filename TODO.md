@@ -9,7 +9,6 @@
 * the CLI
   - custom title template
 
-  - psalm input: file, stdin
   - must do something useful even without any options (just point 2,2 accents?)
   - must provide shortcut options for a few most common setups
   - should detect presence/absence of a psalm title correctly and just warn if the options don't correspond
