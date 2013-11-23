@@ -5,6 +5,9 @@
 * handle strophes
 
 * specify dependencies (normal usage / dev) in the gemspec; verify in a clean gemset
+	* colorize
+
+* dry Outputters (Console copies a lot from Latex)
 
 * the CLI
   - custom title template

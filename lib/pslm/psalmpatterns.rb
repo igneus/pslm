@@ -12,9 +12,22 @@ module Pslm
     # expects a well-formed data structure -
     # as an example see the yaml files in directory psalmtones
     def initialize(data)
-      @data = data
+      @data = {}
+
+      # downcase all tone and difference identifiers
+      data.each_pair do |tone, tdata|
+        if tdata[1][1].is_a? Hash then
+          dfrs = {}
+          tdata[1][1].each_pair do |df, num|
+            dfrs[df.downcase] = num
+          end
+          tdata[1][1] = dfrs
+        end
+        @data[tone.downcase] = tdata
+      end
     end
 
+    # alternative constructors
     class << self
 
       def from_yaml(str)
@@ -34,6 +47,9 @@ module Pslm
     # returns an Array like [[1,2], [2,0]]
     # specifying number of accents and
     def tone_data(tone, difference='')
+      tone.downcase!
+      difference.downcase!
+
       unless @data.has_key? tone
         raise ToneError.new "Unknown tone '#{tone}'"
       end

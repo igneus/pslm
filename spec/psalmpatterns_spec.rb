@@ -54,6 +54,11 @@ describe Pslm::PsalmPatterns do
       @patterns_i.tone_data('I', 'z').should eq [[2, 0], [1, 2]]
       @patterns_i.tone_data('I', '$').should eq [[2, 0], [1, 2]]
     end
+
+    it 'is case insensitive' do
+      @patterns_iv.tone_data('IV', 'g').should eq [[1,2], [1,0]]
+      @patterns_iv.tone_data('iv', 'G').should eq [[1,2], [1,0]]
+    end
   end
 
   describe "#describe_tone_data" do
