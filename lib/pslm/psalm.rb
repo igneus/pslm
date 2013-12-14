@@ -14,6 +14,7 @@ module Pslm
 
     attr_reader :header, :strophes
 
+    # accesses all verses of the psalm regardless of the strophes
     def verses
       @strophes.collect {|s| s.verses }.flatten
     end

@@ -28,8 +28,8 @@ module Pslm
 
       # build the output; on each step apply the appropriate method
       # of each formatter in the given order
-      psalm_assembled = psalm.verses.collect do |verse|
-        process_verse(verse, opts, psalm, formatters)
+      psalm_assembled = psalm.strophes.collect do |strophe|
+        process_strophe(strophe, opts, psalm, formatters)
       end.delete_if {|v| v == '' }.join "\n"
 
       return Formatter.format(formatters, :psalm,
@@ -38,6 +38,19 @@ module Pslm
     end
 
     alias :process :process_psalm
+
+    def process_strophe(strophe, opts, psalm, formatters=nil)
+      formatters = formatters || get_formatters(opts)
+
+      strophe_assembled = strophe.verses.collect do |verse|
+        process_verse(verse, opts, psalm, formatters)
+      end.delete_if {|v| v == '' }.join "\n"
+
+      return Formatter.format(formatters, :strophe,
+                              strophe_assembled,
+                              psalm,
+                              strophe)
+    end
 
     def process_verse(verse, opts, psalm=nil, formatters=nil)
       formatters = formatters || get_formatters(opts)
@@ -114,6 +127,10 @@ module Pslm
         @word_counter = 0
         @part_counter = 0
         @verse_counter = 0
+        text
+      end
+
+      def strophe_format(text, psalm, strophe)
         text
       end
 
