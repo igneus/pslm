@@ -77,15 +77,14 @@ module Pslm
             while w.size > 0 do
               i = w.index(/[\/\[\]]/)
               if i == nil then # last syllable
-                sylls << Psalm::Syllable.new(w)
+                sylls << Psalm::Syllable.new(syll_strip_special_chars(w))
                 break
               end
               s = w.slice!(0..i)
               accent = (s[-1] == ']')
               s = s[0..-2] # discard the delimiter
               next if s == '' # delimiter at the beginning/end of the string
-              s.gsub!('_', ' ') # underscore is "syllable-not-dividing space" mark - replace it
-              sylls << Psalm::Syllable.new(s, accent)
+              sylls << Psalm::Syllable.new(syll_strip_special_chars(s), accent)
             end
             Psalm::Word.new(sylls)
           }, part_src, part[:name])
@@ -166,6 +165,12 @@ module Pslm
       else
         return s
       end
+    end
+
+    # removes special characters from a String before a Psalm Syllable
+    # is created
+    def syll_strip_special_chars(str)
+      str.gsub('_', ' ') # underscore is "syllable-not-dividing space" mark
     end
 
     public

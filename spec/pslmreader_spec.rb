@@ -143,5 +143,19 @@ smi/luj se na/de mnou a [slyš] mou [pros]bu!"
       word_width_prep.syllables.size.should eq 3
       word_width_prep.syllables[0].to_s.should eq "v sou"
     end
+
+    it 'handles connected preposition also in a one-syllable word at the beginning of a verse part' do
+      text = "Lk 1, 46-55
+
+Ve/le/bí *
+má du/še [Hos]po[di]na
+
+... A jeho milosrdenství trvá od po/ko/le/ní [do] po[ko]lení *
+k_těm, [kdo] se ho [bo]jí."
+      canticle = @reader.read_str text
+      word_width_prep = canticle.verses[1].parts[1].words[0]
+      word_width_prep.syllables.size.should eq 1
+      word_width_prep.syllables[0].to_s.should eq "k těm,"
+    end
   end
 end
