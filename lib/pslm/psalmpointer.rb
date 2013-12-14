@@ -7,6 +7,12 @@ module Pslm
 
     def initialize(options)
       @options = options
+
+      # make @options a StructuredSetup - because of deep #dup and recursive #update
+      unless @options.is_a? StructuredSetup
+        @options = StructuredSetup.new @options
+      end
+
       @reader = PslmReader.new
     end
 

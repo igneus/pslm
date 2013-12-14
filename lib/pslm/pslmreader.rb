@@ -52,8 +52,7 @@ module Pslm
             return part_loaded # eof
           end
 
-          # later the empty lines will be parsed as strophe delimiters,
-          # but for now we ignore them
+          # empty line is strophe delimiter - return empty string to signal new strophe
           while part_loaded =~ /^\s*$/ do
             return ''
           end
@@ -68,7 +67,7 @@ module Pslm
 
           part_src = part_loaded.dup
           if [:flex, :first].include? part[:name] then
-            part_loaded.sub!(/[\+\*]/, '') # there should be only one of these chars, at the very end of the line
+            part_loaded.sub!(/[\+\*]\s*$/, '') # there should be only one of these chars, at the very end of the line
             part_loaded.strip!
           end
 

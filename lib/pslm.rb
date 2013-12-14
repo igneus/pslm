@@ -12,3 +12,5 @@ require_relative 'pslm/outputter'
 require_relative 'pslm/latexoutputter'
 require_relative 'pslm/pslmoutputter'
 require_relative 'pslm/consoleoutputter'
+
+require_relative 'pslm/structuredsetup'
