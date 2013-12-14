@@ -10,26 +10,33 @@ module Pslm
       @reader = PslmReader.new
     end
 
-    def process(psalm_files)
-      if @options[:general][:output_file] != nil then
-        outf = File.open @options[:general][:output_file], 'w'
+    def process(psalm_files, output_file=nil, overwr_options={})
+      options = @options.dup
+      options.update overwr_options
+
+      if output_file != nil then
+        outf = File.open output_file, 'w'
       else
         outf = STDOUT
+      end
+
+      unless psalm_files.is_a? Array
+        psalm_files = [ psalm_files ]
       end
 
       psalms = psalm_files.collect do |pf|
         @reader.load_psalm(open_psalm_file(pf))
       end
 
-      if @options[:input][:join] then
+      if options[:input][:join] then
         while p = psalms.slice!(1) do
           psalms[0] += p
         end
       end
 
-      outputter = get_outputter @options[:general][:format]
+      outputter = get_outputter options[:general][:format]
       psalms.each do |ps|
-        outf.puts outputter.process_psalm ps, @options[:output]
+        outf.puts outputter.process_psalm ps, options[:output]
       end
 
       if outf != STDOUT then

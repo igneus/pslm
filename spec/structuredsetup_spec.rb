@@ -56,4 +56,21 @@ describe StructuredSetup do
       @empty.get(:section, :item).should eq 9
     end
   end
+
+  describe '#update' do
+    it 'updates recursively' do
+      setup = StructuredSetup.new({
+        :elephant => {
+          :ears => 'large',
+          :eyes => 'rather small'
+        },
+        :giraffe => {
+          :neck => 'very long',
+        }
+      })
+
+      setup.update({:elephant => {:ears => 'very large', :tail => true}})
+      setup[:elephant].should eq({:ears => 'very large', :eyes => 'rather small', :tail => true})
+    end
+  end
 end

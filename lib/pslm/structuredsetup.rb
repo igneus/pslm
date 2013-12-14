@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 require 'delegate'
+require 'deep_merge/core' # only the environment non polluting core of deep_merge
 
 # Nested Hashes; automatic creation of missing nodes
 class StructuredSetup < SimpleDelegator
@@ -34,6 +35,14 @@ class StructuredSetup < SimpleDelegator
     end
 
     return innermost[args[-1]]
+  end
+
+  def dup
+    deep_copy self
+  end
+
+  def update(s2)
+    DeepMerge.deep_merge! s2, @data
   end
 
   private

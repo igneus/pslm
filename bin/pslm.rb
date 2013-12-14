@@ -10,7 +10,6 @@ require 'pslm/structuredsetup'
 DEFAULT_SETUP = {
   :general => {
     :format => 'latex', # latex|pslm
-    :output_file => nil,
   },
   :input => {
     :has_title => true,
@@ -149,4 +148,4 @@ if ARGV.empty? then
   raise "Program expects filenames as arguments."
 end
 
-Pslm::PsalmPointer.new(setup).process(ARGV)
+Pslm::PsalmPointer.new(setup).process(ARGV, setup[:general][:output_file])
