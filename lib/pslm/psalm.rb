@@ -9,14 +9,29 @@ module Pslm
     def initialize
       @header = OpenStruct.new
       @header.title = ''
-      @verses = []
-      @strophes = []
+      @strophes = [ Strophe.new ]
     end
 
-    attr_reader :header, :verses
+    attr_reader :header, :strophes
+
+    def verses
+      @strophes.collect {|s| s.verses }.flatten
+    end
+
+    def add_strophe(s=nil)
+      if s != nil then
+        @strophes << s
+      else
+        @strophes << Strophe.new
+      end
+    end
+
+    def add_verse(v)
+      @strophes.last.verses << v
+    end
 
     def ==(ps2)
-      ps2.is_a?(Psalm) && self.header == ps2.header && self.verses == ps2.verses
+      ps2.is_a?(Psalm) && self.header == ps2.header && self.strophes == ps2.strophes
     end
 
     # returns a new Psalm containing verses of the second appended to the verses
@@ -24,8 +39,20 @@ module Pslm
     # (title etc. of the second Psalm get lost)
     def +(ps2)
       ps_res = self.dup
-      ps_res.verses.concat ps2.verses
+      ps_res.strophes.concat ps2.strophes
       return ps_res
+    end
+
+    class Strophe
+      def initialize
+        @verses = []
+      end
+
+      attr_reader :verses
+
+      def ==(s2)
+        s2.is_a?(Strophe) && self.verses == s2.verses
+      end
     end
 
     class Verse

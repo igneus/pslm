@@ -115,9 +115,7 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       psalm.verses.size.should eq 1 # the first verse will be (mis)interpreted as title+empty line
     end
 
-    it 'skips empty lines between verses' do
-      # later the empty lines will be parsed as strophe delimiters,
-      # but for now we ignore them
+    it 'handles empty line as strophe-divider' do
       psalm_text = "Psalmus 116.
 
 Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
@@ -125,7 +123,9 @@ lau/dá/te e/um, [om]nes [pó]pu/li:
 
 Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
 et véritas Dó/mi/ni ma/net [in] æ[tér]num."
-      @reader.read_str(psalm_text).should eq @psalm
+      psalm_with_strophes = @reader.read_str(psalm_text)
+      psalm_with_strophes.verses.should eq @psalm.verses
+      psalm_with_strophes.strophes.size.should eq 2
     end
 
     it 'handles prepositions connected to the following word as part of it\'s first syllable' do

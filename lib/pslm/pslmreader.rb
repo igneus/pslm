@@ -27,7 +27,11 @@ module Pslm
       ps.header.title = load_title(istream, has_title, autodetect)
 
       while v = load_verse(istream) do
-        ps.verses << v
+        if v == '' then
+          ps.add_strophe
+        else
+          ps.add_verse v
+        end
       end
 
       return ps
@@ -51,7 +55,7 @@ module Pslm
           # later the empty lines will be parsed as strophe delimiters,
           # but for now we ignore them
           while part_loaded =~ /^\s*$/ do
-            part_loaded = gets_drop_comments istream
+            return ''
           end
 
           unless part_loaded =~ part[:regex]
