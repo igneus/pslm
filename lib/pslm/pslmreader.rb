@@ -80,6 +80,7 @@ module Pslm
               accent = (s[-1] == ']')
               s = s[0..-2] # discard the delimiter
               next if s == '' # delimiter at the beginning/end of the string
+              s.gsub!('_', ' ') # underscore is "syllable-not-dividing space" mark - replace it
               sylls << Psalm::Syllable.new(s, accent)
             end
             Psalm::Word.new(sylls)

@@ -127,5 +127,21 @@ Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
 et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       @reader.read_str(psalm_text).should eq @psalm
     end
+
+    it 'handles prepositions connected to the following word as part of it\'s first syllable' do
+      # needed for Czech texts
+      psalm_text = "Žalm 4
+
+Bo/že, za/stán/ce mé/ho prá/va, vy/slech/ni mě, když [vo]lám, +
+tys mě v_sou/že/ní [vy]svo[bo]dil, *
+smi/luj se na/de mnou a [slyš] mou [pros]bu!"
+      psalm = @reader.read_str psalm_text
+      part = psalm.verses.first.parts[1]
+      part.words.size.should eq 4
+
+      word_width_prep = part.words[2]
+      word_width_prep.syllables.size.should eq 3
+      word_width_prep.syllables[0].to_s.should eq "v sou"
+    end
   end
 end

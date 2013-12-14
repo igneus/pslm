@@ -4,6 +4,8 @@
 
 * handle strophes
 
+* html outputter - will be used in eantifonar
+
 * dry Outputters (Console copies a lot from Latex)
 
 * CLI
@@ -43,6 +45,5 @@
 
 ## output
 * notated (single line of notes, text aligned beneath) - LilyPond
-* html
 * latex: easy (no command definitions necessary) and semantic (\accent instead of \underline etc.) mode
-* notated first line - gregorio
+* notated first line - gregorio, lilypond

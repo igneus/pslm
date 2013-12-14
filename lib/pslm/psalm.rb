@@ -108,6 +108,10 @@ module Pslm
         s2.is_a? Syllable and (self.to_s == s2.to_s) and (self.accent? == s2.accent?)
       end
 
+      def to_s
+        String.new self
+      end
+
       def inspect
         accent = @accent ? ' accent' : ''
         return '#' + "<#{self.class}:#{self.object_id} \"#{self}\"#{accent}>"
