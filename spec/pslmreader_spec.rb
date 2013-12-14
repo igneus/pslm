@@ -157,5 +157,19 @@ k_těm, [kdo] se ho [bo]jí."
       word_width_prep.syllables.size.should eq 1
       word_width_prep.syllables[0].to_s.should eq "k těm,"
     end
+
+    it 'handles everything in the accent parenthesis as one syllable' do
+      # in the parenthesis no underscore should be necessary to say that the content is one syllable
+      text = "Žalm 147-II (12-20)
+
+Je/ru/za/lé/me, o/sla/vuj [Hos]po[di]na, *
+chval své/ho [Bo]ha, [Si]ó/ne,
+že zpev/nil [zá]vo/ry [tvých] bran, *
+po/žeh/nal tvým [sy]nům [v to]bě."
+      psalm = @reader.read_str text
+      word_with_prep = psalm.verses[1].parts[1].words.last
+      word_with_prep.syllables.size.should eq 2
+      word_with_prep.syllables[0].to_s.should eq "v to"
+    end
   end
 end

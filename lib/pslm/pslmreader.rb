@@ -71,7 +71,23 @@ module Pslm
             part_loaded.strip!
           end
 
-          words = Psalm::VersePart.new(part_loaded.split(' ').collect {|w|
+          # split words, be aware of accents (space between accent parenthesis doesn't break word)
+          words_raw = []
+          in_accent = false
+          word_start = 0
+          part_loaded.chars.each_with_index do |c, ci|
+            if c == '[' then
+              in_accent = true
+            elsif c == ']' then
+              in_accent = false
+            elsif in_accent == false && c == ' ' then
+              words_raw << part_loaded[word_start .. ci-1]
+              word_start = ci+1
+            end
+          end
+          words_raw << part_loaded[word_start .. -1] # last word
+
+          words = words_raw.collect do |w|
             sylls = []
             while w.size > 0 do
               i = w.index(/[\/\[\]]/)
@@ -86,9 +102,10 @@ module Pslm
               sylls << Psalm::Syllable.new(syll_strip_special_chars(s), accent)
             end
             Psalm::Word.new(sylls)
-          }, part_src, part[:name])
+          end
+          versepart = Psalm::VersePart.new(words, part_src, part[:name])
 
-          verse.send(part[:method], words)
+          verse.send(part[:method], versepart)
 
           unless part[:name] == :second
             part_loaded = gets_drop_comments istream
