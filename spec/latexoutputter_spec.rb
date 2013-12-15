@@ -240,5 +240,24 @@ psallam Deo meo quámdiu fúero.'
           :novydvur_newlines => true,}
       }).should eq expected
     end
+
+    it 'makes a lettrine' do
+      expected = '\lettrine{L}{audáte} Dóminum, omnes Gentes:
+laudáte eum, omnes pópuli:'
+      @outputter.process_verse(@verse, {
+        :lettrine => {}
+      }).should eq expected
+    end
+
+    it 'makes a lettrine with digraph' do
+      verse_text = "Chvalte Hospo[di]na [z ne]bes, *
+chvalte ho [na] vý[sos]tech!"
+      expected = '\lettrine{Ch}{valte} Hospodina z nebes,
+chvalte ho na výsostech!'
+      verse = @reader.load_verse(StringIO.new(verse_text))
+      @outputter.process_verse(verse, {
+        :lettrine => { :digraphs => ['ch'] }
+      }).should eq expected
+    end
   end
 end

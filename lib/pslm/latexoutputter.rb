@@ -30,7 +30,7 @@ module Pslm
       # of each formatter in the given order
       psalm_assembled = psalm.strophes.collect do |strophe|
         process_strophe(strophe, opts, psalm, formatters)
-      end.delete_if {|v| v == '' }.join "\n"
+      end.join "\n"
 
       return Formatter.format(formatters, :psalm,
                               psalm_assembled,
@@ -96,6 +96,7 @@ module Pslm
       if self.class.const_defined? cls_name then
         return self.class.const_get(cls_name).new(options)
       else
+        #STDERR.puts "formatter #{cls_name} not found"
         return nil
       end
     end
@@ -311,6 +312,32 @@ module Pslm
         end
 
         return text
+      end
+    end
+
+    # formats the first word of the first verse as a lettrine
+    class LettrineFormatter < Formatter
+      def initialize(options)
+        super(options)
+        @digraphs = []
+        if @options and @options[:digraphs] then
+          @digraphs = @options[:digraphs]
+        end
+        @done = false
+      end
+
+      def verse_format(text, psalm, verse)
+        return text if @done
+
+        @done = true
+        return text.sub(/^([^\s]+)/) {
+          initial_size = 1
+          digraph = @digraphs.find {|d| text.downcase.start_with? d }
+          if digraph then
+            initial_size = digraph.size
+          end
+          '\lettrine{'+$1[0...initial_size]+'}{'+$1[initial_size..-1]+'}'
+        }
       end
     end
 

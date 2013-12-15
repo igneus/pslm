@@ -31,7 +31,7 @@ module Pslm
       :wrapper => {
         :environment_name => 'psalmus'
       },
-      :lettrine => false,
+      :lettrine => nil,
       :prepend_text => nil,
       :output_append_text => nil,
       :line_break_last_line => false,
