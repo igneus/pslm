@@ -288,7 +288,7 @@ dokud nepoložím tvé nepřátele za podnož tvým nohám.\guillemotleft '+'
 \guillemotright Panuj uprostřed svých nepřátel!
 Ode dne zrození je ti určeno vládnout v posvátném lesku:
 zplodil jsem tě jako rosu před jitřenkou.\guillemotleft '
-      psalm = @reader.load_psalm(StringIO.new(psalm_text))
+      psalm = @reader.read_str(psalm_text)
       @outputter.process_psalm(psalm, {
         :quote => :guillemets
       }).should eq expected
@@ -302,6 +302,31 @@ a říká si v srdci: Nepotrestá!?"
       verse = @reader.load_verse(StringIO.new(verse_text))
       @outputter.process_verse(verse, {
         :quote => :delete
+      }).should eq expected
+    end
+
+    it 'marks strophe ends' do
+      psalm_text = "Psalmus 116.
+
+Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
+lau/dá/te e/um, [om]nes [pó]pu/li:
+
+Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+      expected = 'Laudáte Dóminum, omnes Gentes:
+laudáte eum, omnes pópuli:\\
+
+Quóniam confirmáta est super nos misericórdia ejus:
+et véritas Dómini manet in ætérnum.'
+      psalm = @reader.read_str(psalm_text)
+      @outputter.process_psalm(psalm, {
+        :strophes => {
+          :end_marks => false,
+          :paragraph_space => true,
+        },
+        :verses => {
+          :paragraphify => true
+        },
       }).should eq expected
     end
   end

@@ -287,6 +287,35 @@ module Pslm
       end
     end
 
+    class StrophesFormatter < Formatter
+
+      END_MARKS = {
+        :semantic => '\psalmStrophe',
+        :simple => '\hspace*{0pt}\hfill--'
+      }
+
+      def initialize(options)
+        super
+        @options[:paragraph_space] ||= false
+        @options[:end_marks] ||= false
+        @options[:mark_last_strophe] ||= false
+      end
+
+      def strophe_format(text, psalm, strophe)
+        if strophe == psalm.strophes.last and not @options[:mark_last_strophe] then
+          return text
+        end
+
+        if @options[:end_marks] then
+          text += END_MARKS[@options[:end_marks]]
+        end
+        if @options[:paragraph_space] then
+          text += '\\'
+        end
+        return text
+      end
+    end
+
     # inserts a newline between verses
     class VersesFormatter < Formatter
       def verse_format(text, psalm, verse)

@@ -25,8 +25,9 @@ module Pslm
       },
       :skip_verses => 0,
       :strophes => {
-        :dashes => false,
+        :end_marks => false,
         :paragraph_space => true,
+        :mark_last_strophe => false,
       },
       :wrapper => {
         :environment_name => 'psalmus'
