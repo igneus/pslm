@@ -252,11 +252,56 @@ laudáte eum, omnes pópuli:'
     it 'makes a lettrine with digraph' do
       verse_text = "Chvalte Hospo[di]na [z ne]bes, *
 chvalte ho [na] vý[sos]tech!"
-      expected = '\lettrine{Ch}{valte} Hospodina z nebes,
+      expected = '\lettrine{CH}{valte} Hospodina z nebes,
 chvalte ho na výsostech!'
       verse = @reader.load_verse(StringIO.new(verse_text))
       @outputter.process_verse(verse, {
         :lettrine => { :digraphs => ['ch'] }
+      }).should eq expected
+    end
+
+    it 'replaces a pair of quotation marks in a verse' do
+      verse_text = 'Jak to, že bezbožník [po]hrdá [Bo]hem *
+a říká si v srdci: "[Ne]po[tres]tá!"?'
+      expected = "Jak to, že bezbožník pohrdá Bohem
+a říká si v srdci: ``Nepotrestá!''?"
+      verse = @reader.load_verse(StringIO.new(verse_text))
+      @outputter.process_verse(verse, {
+        :quote => :double
+      }).should eq expected
+    end
+
+    it 'replaces quotation marks correctly in a psalm' do
+      psalm_text = 'Žalm 110, 1-5.7
+
+Hos/po/din ře/kl mé/mu [Pá]nu: +
+"Seď [po] mé [pra]vi/ci, *
+do/kud ne/po/lo/žím tvé ne/přá/te/le za pod[nož] tvým [no]hám."
+Žezlo moci ti podává Hos/po/din [ze] Si[ó]nu: *
+"Pa/nuj u/pro[střed] svých [ne]přátel!
+Ode dne zrození je ti urče/no vlád/nout [v po]svát/ném [les]ku: *
+zplodil jsem tě ja/ko ro/su [před] ji[třen]kou."'
+      expected = 'Hospodin řekl mému Pánu:
+\guillemotright Seď po mé pravici,
+dokud nepoložím tvé nepřátele za podnož tvým nohám.\guillemotleft '+'
+Žezlo moci ti podává Hospodin ze Siónu:
+\guillemotright Panuj uprostřed svých nepřátel!
+Ode dne zrození je ti určeno vládnout v posvátném lesku:
+zplodil jsem tě jako rosu před jitřenkou.\guillemotleft '
+      psalm = @reader.load_psalm(StringIO.new(psalm_text))
+      @outputter.process_psalm(psalm, {
+        :quote => :guillemets
+      }).should eq expected
+    end
+
+    it 'deletes quotation marks' do
+      verse_text = 'Jak to, že bezbožník [po]hrdá [Bo]hem *
+a říká si v srdci: "[Ne]po[tres]tá!"?'
+      expected = "Jak to, že bezbožník pohrdá Bohem
+a říká si v srdci: Nepotrestá!?"
+      verse = @reader.load_verse(StringIO.new(verse_text))
+      @outputter.process_verse(verse, {
+        :quote => :delete
       }).should eq expected
     end
   end

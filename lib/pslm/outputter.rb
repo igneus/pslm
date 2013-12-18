@@ -35,7 +35,7 @@ module Pslm
       :prepend_text => nil,
       :output_append_text => nil,
       :line_break_last_line => false,
-      :guillemets => false,
+      :quote => false, # :single|:double|:guillemets|:czech|:delete
       :mark_short_verses => false
     }
 

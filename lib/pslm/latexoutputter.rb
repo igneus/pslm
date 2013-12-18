@@ -5,6 +5,7 @@ module Pslm
   # formats a psalm for LaTeX
   class LatexOutputter < Outputter
 
+    # each Formatter must have it's symbol in the order, otherwise it won't be used
     FORMATTER_ORDER = [
       :pointing,
       :break_hints,
@@ -18,7 +19,7 @@ module Pslm
       :prepend_text,
       :output_append_text,
       :line_break_last_line,
-      :guillemets,
+      :quote,
       :mark_short_verses
     ]
 
@@ -352,6 +353,44 @@ module Pslm
       def psalm_format(text, psalm)
         TEMPLATE[@options[:template]] % psalm.header.title +
           text
+      end
+    end
+
+    # replaces dumb quotation marks "" by smarter ones
+    class QuoteFormatter < Formatter
+
+      STYLES = {
+        :double => ["``", "''"],
+        :single => ["'", "'"],
+        :guillemets => ['\guillemotright ', '\guillemotleft '],
+        :delete => ['', '']
+      }
+
+      def initialize(options)
+        super(options)
+        @style = @options
+        unless STYLES.has_key? @style
+          raise "Quotation marks style '#{@style}' unknown."
+        end
+        @quote_counter = 0
+        puts "hey ho"
+      end
+
+      def psalm_format(text, psalm)
+        super(text, psalm)
+        @quote_counter = 0
+        text
+      end
+
+      def verse_format(text, psalm, verse)
+        return text.gsub('"') do
+          @quote_counter += 1
+          if @quote_counter % 2 == 1 then
+            STYLES[@style].first
+          else
+            STYLES[@style].last
+          end
+        end
       end
     end
   end
