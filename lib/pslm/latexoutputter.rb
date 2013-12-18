@@ -10,10 +10,10 @@ module Pslm
       :pointing,
       :break_hints,
       :parts,
+      :strophes,
       :verses,
       :skip_verses,
       :title,
-      :strophes,
       :lettrine,
       :wrapper,
       :prepend_text,
@@ -301,8 +301,11 @@ module Pslm
         @options[:mark_last_strophe] ||= false
       end
 
-      def strophe_format(text, strophe, psalm)
+      def verse_format(text, verse, strophe, psalm)
         if strophe == psalm.strophes.last and not @options[:mark_last_strophe] then
+          return text
+        end
+        if verse != strophe.verses.last then
           return text
         end
 
@@ -402,7 +405,6 @@ module Pslm
           raise "Quotation marks style '#{@style}' unknown."
         end
         @quote_counter = 0
-        puts "hey ho"
       end
 
       def psalm_format(text, psalm)
