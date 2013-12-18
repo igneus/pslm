@@ -44,16 +44,16 @@ module Pslm
       formatters = formatters || get_formatters(opts)
 
       strophe_assembled = strophe.verses.collect do |verse|
-        process_verse(verse, opts, psalm, formatters)
+        process_verse(verse, opts, strophe, psalm, formatters)
       end.delete_if {|v| v == '' }.join "\n"
 
       return Formatter.format(formatters, :strophe,
                               strophe_assembled,
-                              psalm,
-                              strophe)
+                              strophe,
+                              psalm)
     end
 
-    def process_verse(verse, opts, psalm=nil, formatters=nil)
+    def process_verse(verse, opts, strophe=nil, psalm=nil, formatters=nil)
       formatters = formatters || get_formatters(opts)
 
       verse_assembled = verse.parts.collect do |part|
@@ -62,19 +62,19 @@ module Pslm
 
           word_assembled = word.syllables.reverse.collect do |syll|
             Formatter.format(formatters, :syllable,
-                              syll, part, word, syll)
+                              syll, syll, word, part, verse, strophe, psalm)
           end.reverse.join ''
 
           Formatter.format(formatters, :word,
-                            word_assembled, word)
+                            word_assembled, word, part, verse, strophe, psalm)
         end.reverse.join ' '
 
         Formatter.format(formatters, :part,
-                          part_assembled, part)
+                          part_assembled, part, verse, strophe, psalm)
       end.join "\n"
 
       return Formatter.format(formatters, :verse,
-                              verse_assembled, psalm, verse)
+                              verse_assembled, verse, strophe, psalm)
     end
 
     # takes a Hash of options,
@@ -132,11 +132,11 @@ module Pslm
         text
       end
 
-      def strophe_format(text, psalm, strophe)
+      def strophe_format(text, strophe, psalm)
         text
       end
 
-      def verse_format(text, psalm, verse)
+      def verse_format(text, verse, strophe, psalm)
         @verse_counter += 1
         @syll_counter = 0
         @word_counter = 0
@@ -144,19 +144,19 @@ module Pslm
         text
       end
 
-      def part_format(text, part)
+      def part_format(text, part, verse, strophe, psalm)
         @part_counter += 1
         @syll_counter = 0
         @word_counter = 0
         text
       end
 
-      def word_format(text, word)
+      def word_format(text, word, part, verse, strophe, psalm)
         @word_counter += 1
         text
       end
 
-      def syllable_format(text, part, word, syll)
+      def syllable_format(text, syll, word, part, verse, strophe, psalm)
         @syll_counter += 1
         text
       end
@@ -183,8 +183,8 @@ module Pslm
         end
       end
 
-      def part_format(text, part)
-        super(text, part)
+      def part_format(text, part, verse, strophe, psalm)
+        super(text, part, verse, strophe, psalm)
         @accent_counter = 0
         @preparatories_counter = 0
         text
@@ -196,8 +196,8 @@ module Pslm
         :semantic => 'accent'
       }
 
-      def syllable_format(text, part, word, syll)
-        super(text, part, word, syll)
+      def syllable_format(text, syll, word, part, verse, strophe, psalm)
+        super(text, syll, word, part, verse, strophe, psalm)
         r = text
         if syll.accent? then
           @accent_counter += 1
@@ -252,7 +252,7 @@ module Pslm
 
     # inserts break hints between syllables
     class BreakHintsFormatter < Formatter
-      def syllable_format(text, part, word, syll)
+      def syllable_format(text, syll, word, part, verse, strophe, psalm)
         unless syll == word.syllables.last or
             (word.syllables.size >= 2 and syll == word.syllables[-2] and word.syllables[-1] =~ /^[\.,!?]+$/)
           return text + '\-'
@@ -273,7 +273,7 @@ module Pslm
         :no => { :flex => '', :first => '', :second => '' }
       }
 
-      def part_format(text, part)
+      def part_format(text, part, verse, strophe, psalm)
         text +
           MARKS[@options[:marks_type]][part.pos] +
           ((@options[:novydvur_newlines] && part.pos != :second) ? "\\\\" : '') # insert two backslashes
@@ -301,7 +301,7 @@ module Pslm
         @options[:mark_last_strophe] ||= false
       end
 
-      def strophe_format(text, psalm, strophe)
+      def strophe_format(text, strophe, psalm)
         if strophe == psalm.strophes.last and not @options[:mark_last_strophe] then
           return text
         end
@@ -318,7 +318,7 @@ module Pslm
 
     # inserts a newline between verses
     class VersesFormatter < Formatter
-      def verse_format(text, psalm, verse)
+      def verse_format(text, verse, strophe, psalm)
         if verse != psalm.verses.last and text != '' then
           return text + "\n"
         else
@@ -334,7 +334,7 @@ module Pslm
         @skip_verses = @options # takes just one number as a parameter
       end
 
-      def verse_format(text, psalm, verse)
+      def verse_format(text, verse, strophe, psalm)
         #super(text, psalm, verse)
         @verse_counter += 1
         if @verse_counter <= @skip_verses then
@@ -356,7 +356,7 @@ module Pslm
         @done = false
       end
 
-      def verse_format(text, psalm, verse)
+      def verse_format(text, verse, strophe, psalm)
         return text if @done
 
         @done = true
@@ -411,7 +411,7 @@ module Pslm
         text
       end
 
-      def verse_format(text, psalm, verse)
+      def verse_format(text, verse, strophe, psalm)
         return text.gsub('"') do
           @quote_counter += 1
           if @quote_counter % 2 == 1 then
