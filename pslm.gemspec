@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.licenses    = ['LGPL-3.0', 'MIT']
 
   s.add_runtime_dependency 'colorize'
+  s.add_runtime_dependency 'deep_merge'
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake"
