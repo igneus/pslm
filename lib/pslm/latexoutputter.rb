@@ -336,7 +336,7 @@ module Pslm
           if digraph then
             initial_size = digraph.size
           end
-          '\lettrine{'+$1[0...initial_size]+'}{'+$1[initial_size..-1]+'}'
+          '\lettrine{'+$1[0...initial_size].upcase+'}{'+$1[initial_size..-1]+'}'
         }
       end
     end
