@@ -40,8 +40,18 @@ module Pslm
         end
       end
 
+      if options[:input][:title] then
+        psalms.first.header.title = options[:input][:title] # should it be set for all instead of for the first one only?
+      end
+
       outputter = get_outputter options[:general][:format]
       psalms.each do |ps|
+        # yield the psalm before producing output to allow modification
+        modified = yield ps
+        if modified != ps and modified.is_a?(Psalm) then
+          ps = modified
+        end
+
         outf.puts outputter.process_psalm ps, options[:output]
       end
 

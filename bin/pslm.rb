@@ -13,6 +13,7 @@ DEFAULT_SETUP = {
   },
   :input => {
     :has_title => true,
+    :title => nil, # to overwrite the title loaded from the input file
     :join => false,
   },
   :output => Pslm::Outputter::DEFAULT_SETUP.dup
