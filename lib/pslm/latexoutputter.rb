@@ -82,6 +82,7 @@ module Pslm
     def get_formatters(options)
       return FORMATTER_ORDER.collect do |f|
         next unless options.include? f
+        next unless options[f]
 
         get_formatter(f, options[f])
       end.compact!
