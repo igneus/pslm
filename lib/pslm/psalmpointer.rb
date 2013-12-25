@@ -47,7 +47,7 @@ module Pslm
       outputter = get_outputter options[:general][:format]
       psalms.each do |ps|
         # yield the psalm before producing output to allow modification
-        modified = yield ps
+        modified = yield ps if block_given?
         if modified != ps and modified.is_a?(Psalm) then
           ps = modified
         end
