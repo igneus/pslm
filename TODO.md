@@ -1,5 +1,7 @@
 # asap
 
+* choose a language somehow. Important e.g. for lettrine - digraphs
+
 * MAJOR GOAL: fully implement functionality of the [psalmpreprocessor](https://github.com/igneus/In-adiutorium/blob/master/nastroje/psalmpreprocessor.rb)
 
 * handle strophes

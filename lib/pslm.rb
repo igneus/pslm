@@ -14,3 +14,4 @@ require_relative 'pslm/pslmoutputter'
 require_relative 'pslm/consoleoutputter'
 
 require_relative 'pslm/structuredsetup'
+require_relative 'pslm/joinedinput'

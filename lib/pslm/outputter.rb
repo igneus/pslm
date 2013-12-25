@@ -17,7 +17,7 @@ module Pslm
       },
       :break_hints => true,
       :parts => {
-        :marks_type => :simple, # :simple|:semantic|:no
+        :marks_type => :semantic, # :simple|:semantic|:no
         :novydvur_newlines => false,
       },
       :verses => {

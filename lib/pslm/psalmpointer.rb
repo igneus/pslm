@@ -31,7 +31,11 @@ module Pslm
       end
 
       psalms = psalm_files.collect do |pf|
-        @reader.load_psalm(open_psalm_file(pf))
+        inf = open_psalm_file(pf)
+        if options[:input][:append] then
+          inf = JoinedInput.new inf, StringIO.new(options[:input][:append])
+        end
+        @reader.load_psalm(inf)
       end
 
       if options[:input][:join] then

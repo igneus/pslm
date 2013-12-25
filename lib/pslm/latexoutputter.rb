@@ -384,8 +384,15 @@ module Pslm
       }
 
       def psalm_format(text, psalm)
-        TEMPLATE[@options[:template]] % psalm.header.title +
-          text
+        if @options[:template].is_a? Symbol then
+          return TEMPLATE[@options[:template]] % psalm.header.title +
+            text
+        elsif @options[:template].is_a? String then
+          return @options[:template] % psalm.header.title +
+            text
+        else
+          raise ArgumentError, "Don't know what to do with template of type #{@options[:template].class}."
+        end
       end
     end
 

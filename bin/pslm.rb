@@ -43,6 +43,9 @@ optparse = OptionParser.new do |opts|
   opts.on "--no-title", "Don't consider the first line to contain a psalm title" do
     setup[:input][:has_title] = false
   end
+  opts.on "--set-title TITLE", "Manually set title" do |t|
+    setup[:input][:title] = t
+  end
   opts.on "--append TEXT", "Text to be appended at the end (before processing)." do |t|
     setup[:input][:append_text] = t
   end
@@ -55,9 +58,8 @@ optparse = OptionParser.new do |opts|
   opts.on "--skip-title", "Don't set the title" do
     setup[:output][:title][:template] = :no
   end
-  # TODO
   opts.on "--title-template [TEMPLATE]", "Use a specified template instead of the default one." do |p|
-    setup[:output][:title_pattern] = p
+    setup[:output][:title][:template] = p
   end
   opts.on "-k", "--skip-verses NUM", Integer, "Skip initial verses" do |i|
     setup[:output][:skip_verses] = i
@@ -97,7 +99,7 @@ optparse = OptionParser.new do |opts|
   # Needs LaTeX package lettrine!
   # TODO
   opts.on "--lettrine", "Large first character of the psalm." do
-    setup[:output][:lettrine] = true
+    setup[:output][:lettrine] = {}
   end
   opts.on "--split-verses", "Each verse part on it's own line" do
     setup[:output][:parts][:novydvur_newlines] = true # like in the psalter of the Novy Dvur Trappist abbey
@@ -126,7 +128,7 @@ optparse = OptionParser.new do |opts|
   end
   # TODO
   opts.on "--guillemets", "Convert american quotes to french ones (guillemets)." do
-    setup[:output][:guillemets] = true
+    setup[:output][:quote] = :guillemets
   end
   # TODO
   opts.on "-m", "--mark-short-verses", "Insert warning marks in verses that are too short" do
