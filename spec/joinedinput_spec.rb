@@ -10,8 +10,19 @@ describe JoinedInput do
       s2 = StringIO.new 'def'
       joined = JoinedInput.new s1, s2
 
-      joined.gets.should eq 'abc'
-      joined.gets.should eq 'def'
+      joined.gets.should eq "abc\n"
+      joined.gets.should eq "def\n"
+      joined.gets.should be_nil
+    end
+
+    it 'handles newlines correctly' do
+      s1 = StringIO.new 'hi'
+      s2 = StringIO.new "\nhey"
+      joined = JoinedInput.new s1, s2
+
+      joined.gets.should eq "hi\n"
+      joined.gets.should eq "\n"
+      joined.gets.should eq "hey\n"
       joined.gets.should be_nil
     end
   end

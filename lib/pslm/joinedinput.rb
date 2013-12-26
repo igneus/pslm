@@ -20,6 +20,10 @@ class JoinedInput
       return gets
     end
 
+    unless l.end_with? "\n"
+      l += "\n"
+    end
+
     return l
   end
 
