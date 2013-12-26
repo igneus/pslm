@@ -64,10 +64,6 @@ optparse = OptionParser.new do |opts|
   opts.on "-k", "--skip-verses NUM", Integer, "Skip initial verses" do |i|
     setup[:output][:skip_verses] = i
   end
-  # TODO
-  opts.on "--no-formatting", "Just process accents and don't do anything else with the document" do
-    setup[:output][:no_formatting] = true
-  end
 
   opts.on "-a", "--accents NUMS", "a:b - Numbers of accents to be pointed in each half-verse" do |str|
     a1, a2 = str.split ':'
@@ -117,7 +113,6 @@ optparse = OptionParser.new do |opts|
   opts.on "--linebreak-at-the-end", "Make a line-break after the last line" do
     setup[:output][:line_break_last_line] = true
   end
-  # TODO
   opts.on "--dashes", "Dash at the end of each psalm paragraph" do
     setup[:output][:strophes][:end_marks] = :semantic
   end
@@ -125,7 +120,6 @@ optparse = OptionParser.new do |opts|
   opts.on "--no-paragraph", "No empty line after each psalm paragraph." do
     setup[:output][:paragraph_space] = false
   end
-  # TODO
   opts.on "--guillemets", "Convert american quotes to french ones (guillemets)." do
     setup[:output][:quote] = :guillemets
   end
