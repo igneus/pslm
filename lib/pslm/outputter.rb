@@ -6,7 +6,7 @@ module Pslm
   class Outputter
 
     DEFAULT_SETUP = {
-      :no_formatting => false,
+      :no_formatting => false, # TODO
       :title => {
         :template => :semantic,
       },
@@ -33,11 +33,10 @@ module Pslm
         :environment_name => 'psalmus'
       },
       :lettrine => nil,
-      :prepend_text => nil,
-      :output_append_text => nil,
-      :line_break_last_line => false,
+      :line_break_last_line => false, # TODO
       :quote => false, # :single|:double|:guillemets|:czech|:delete
-      :mark_short_verses => false
+      :mark_short_verses => false, # TODO
+      :final_add_content => false,
     }
 
     def process(psalm, options={})

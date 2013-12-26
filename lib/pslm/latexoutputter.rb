@@ -15,12 +15,13 @@ module Pslm
       :skip_verses,
       :title,
       :lettrine,
+      :final_add_content,
       :wrapper,
       :prepend_text,
       :output_append_text,
       :line_break_last_line,
       :quote,
-      :mark_short_verses
+      :mark_short_verses,
     ]
 
     # takes a Psalm, returns a String with the psalm formatted
@@ -429,6 +430,18 @@ module Pslm
           else
             STYLES[@style].last
           end
+        end
+      end
+    end
+
+    # appends arbitrary text to the final output
+    class FinalAddContentFormatter < Formatter
+      def psalm_format(text, psalm)
+        super(text, psalm)
+        if @options[:append] then
+          return text + "\n" + @options[:append]
+        else
+          return text
         end
       end
     end
