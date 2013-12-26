@@ -62,7 +62,11 @@ module Pslm
               next # probably a verse without flex - try to read the loaded line as a first half-verse
             end
 
-            raise PslmSyntaxError.new("Unexpected verse part on line #{istream.lineno}: \"#{part_loaded}\" Expecting #{part[:name]}")
+            if istream.respond_to? :lineno then
+              raise PslmSyntaxError.new("Unexpected verse part on line #{istream.lineno}: \"#{part_loaded}\" Expecting #{part[:name]}")
+            else
+              raise PslmSyntaxError.new("Unexpected verse part: \"#{part_loaded}\" Expecting #{part[:name]}")
+            end
           end
 
           part_src = part_loaded.dup
