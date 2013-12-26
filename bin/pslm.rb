@@ -119,7 +119,7 @@ optparse = OptionParser.new do |opts|
   end
   # TODO
   opts.on "--dashes", "Dash at the end of each psalm paragraph" do
-    setup[:output][:dashes] = true
+    setup[:output][:strophes][:end_marks] = :semantic
   end
   # TODO
   opts.on "--no-paragraph", "No empty line after each psalm paragraph." do
