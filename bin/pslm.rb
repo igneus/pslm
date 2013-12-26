@@ -47,7 +47,7 @@ optparse = OptionParser.new do |opts|
     setup[:input][:title] = t
   end
   opts.on "--append TEXT", "Text to be appended at the end (before processing)." do |t|
-    setup[:input][:append_text] = t
+    setup[:input][:append] = t
   end
   opts.on "-j", "--join", "Join all given input files" do
     setup[:input][:join] = true
@@ -108,9 +108,8 @@ optparse = OptionParser.new do |opts|
   opts.on "--pretitle TEXT", "Text to be printed as beginning of the title." do |t|
     setup[:output][:prepend_text] = t
   end
-  # TODO
   opts.on "--output-append TEXT", "Text to be appended at the end (of the last line after processing)." do |t|
-    setup[:output][:output_append_text] = t
+    setup[:output][:final_add_content] = {:append => t}
   end
   # This is useful when we want to append a doxology after the psalm
   # as a separate paragraph
