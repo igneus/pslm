@@ -127,6 +127,9 @@ optparse = OptionParser.new do |opts|
   opts.on "-m", "--mark-short-verses", "Insert warning marks in verses that are too short" do
     setup[:output][:mark_short_verses] = true
   end
+  opts.on "--wrapper NAME", "Wrap output in a wrapper with the given name" do |n|
+    setup[:output][:wrapper][:environment_name] = n
+  end
 end
 
 optparse.parse!
