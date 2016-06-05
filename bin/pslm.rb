@@ -1,4 +1,4 @@
-#!/usr/bin/env/ruby
+#!/usr/bin/env ruby
 # -*- coding: utf-8 -*-
 # pslm - psalm processing utility
 
@@ -34,7 +34,7 @@ optparse = OptionParser.new do |opts|
     setup[:general][:output_file] = out
   end
 
-  opts.on "-f", "--format F", "Select output format." do |f|
+  opts.on "-f", "--format F", "Select output format (latex | console)." do |f|
     setup[:general][:format] = f
   end
 
