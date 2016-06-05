@@ -70,9 +70,16 @@ module Pslm
       tone_data(*normalize_tone_str(tonestr))
     end
 
+    alias_method :tone_data_by_str, :tone_data_str
+
     # returns [tone, difference]
     def normalize_tone_str(str)
-      tone, sep, difference = str.rpartition(/[\.\s]/)
+      separator_re = /[^\w]/
+      unless str =~ separator_re
+        return [str, ""]
+      end
+
+      tone, sep, difference = str.rpartition(separator_re)
       return [tone, difference]
     end
 

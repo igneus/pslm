@@ -10,6 +10,8 @@ describe Pslm::PsalmPatterns do
 
     # minimal example of a tone with two differences differing in preparatory syllables
     @patterns_iv = Pslm::PsalmPatterns.from_yaml('IV: [ [1, 2], [1, {g: 0, E: 3}] ]')
+
+    @patterns_per = Pslm::PsalmPatterns.from_yaml('per: [[1, 3], [1, 1]]')
   end
 
   describe "instance creation / initialization" do
@@ -32,6 +34,10 @@ describe Pslm::PsalmPatterns do
 
     it 'returns tone data' do
       @patterns_i.tone_data('I', 'a').should eq [[2, 0], [1, 2]]
+    end
+
+    it 'works for peregrinus' do
+      @patterns_per.tone_data('per').should eq [[1, 3], [1, 1]]
     end
 
     it 'raises ToneError on an unknown tone' do
@@ -58,6 +64,24 @@ describe Pslm::PsalmPatterns do
     it 'is case insensitive' do
       @patterns_iv.tone_data('IV', 'g').should eq [[1,2], [1,0]]
       @patterns_iv.tone_data('iv', 'G').should eq [[1,2], [1,0]]
+    end
+  end
+
+  describe '#tone_data_by_str' do
+    it 'works wit dot as separator' do
+      @patterns_i.tone_data_by_str('I.a').should eq [[2, 0], [1, 2]]
+    end
+
+    it 'works wit space as separator' do
+      @patterns_i.tone_data_by_str('I a').should eq [[2, 0], [1, 2]]
+    end
+
+    it 'works wit random characters as separator' do
+      @patterns_i.tone_data_by_str('I#a').should eq [[2, 0], [1, 2]]
+    end
+
+    it 'works for tone without differences' do
+      @patterns_per.tone_data_by_str('per').should eq [[1, 3], [1, 1]]
     end
   end
 
