@@ -12,7 +12,7 @@ module Pslm
     end
 
     def read_file(fname, has_title=true, autodetect=true)
-      return load_psalm(CountingIStream.new(File.open(str)), has_title, autodetect)
+      return load_psalm(CountingIStream.new(File.open(fname)), has_title, autodetect)
     end
 
     attr_reader :header
