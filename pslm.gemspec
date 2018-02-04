@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency 'colorize'
   s.add_runtime_dependency 'deep_merge'
+  s.add_runtime_dependency 'hashie', '> 3.4'
 
   s.add_development_dependency "rspec"
   s.add_development_dependency "rake"

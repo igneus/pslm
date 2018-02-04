@@ -204,7 +204,7 @@ module Pslm
         if syll.accent? then
           @accent_counter += 1
           if @accent_counter <= num_accents_for(part) then
-            r = "\\#{MARKS[@options[:accent_style]]}{#{r}}"
+            r = "\\#{MARKS[@options[:accent_style].to_sym]}{#{r}}"
           end
         end
 
@@ -277,7 +277,7 @@ module Pslm
 
       def part_format(text, part, verse, strophe, psalm)
         text +
-          MARKS[@options[:marks_type]][part.pos] +
+          MARKS[@options[:marks_type].to_sym][part.pos] +
           ((@options[:novydvur_newlines] && part.pos != :second) ? "\\\\" : '') # insert two backslashes
       end
     end
@@ -291,10 +291,10 @@ module Pslm
 
     class StrophesFormatter < Formatter
 
-      END_MARKS = {
+      END_MARKS = ConfigHash.new({
         :semantic => '\psalmStrophe',
         :simple => '\hspace*{0pt}\hfill--'
-      }
+      })
 
       def initialize(options)
         super
@@ -378,11 +378,11 @@ module Pslm
 
     # formats title
     class TitleFormatter < Formatter
-      TEMPLATE = {
+      TEMPLATE = ConfigHash.new({
         :no => "", # "" % anything => ""
         :plain => "%s\n\n",
         :semantic => "\\titulusPsalmi{%s}\n\n"
-      }
+      })
 
       def psalm_format(text, psalm)
         if @options[:template].is_a? Symbol then
@@ -400,12 +400,12 @@ module Pslm
     # replaces dumb quotation marks "" by smarter ones
     class QuoteFormatter < Formatter
 
-      STYLES = {
+      STYLES = ConfigHash.new({
         :double => ["``", "''"],
         :single => ["'", "'"],
         :guillemets => ['\guillemotright ', '\guillemotleft '],
         :delete => ['', '']
-      }
+      })
 
       def initialize(options)
         super(options)

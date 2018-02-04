@@ -3,6 +3,7 @@
 module Pslm
 end
 
+require_relative 'pslm/config_hash'
 require_relative 'pslm/pslmreader'
 require_relative 'pslm/psalm'
 require_relative 'pslm/psalmpointer'
