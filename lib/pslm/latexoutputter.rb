@@ -404,6 +404,7 @@ module Pslm
         :double => ["``", "''"],
         :single => ["'", "'"],
         :guillemets => ['\guillemotright ', '\guillemotleft '],
+        :outguillemets => ['\guillemotleft ', '\guillemotright '],
         :delete => ['', '']
       })
 
