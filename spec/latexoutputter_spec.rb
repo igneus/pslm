@@ -188,6 +188,35 @@ laudáte eum, \textit{omnes} \textbf{pó}puli:'
       }}).should eq expected
     end
 
+    it 'marks accents and preparatory syllables with semantic commands' do
+      expected = 'Laudáte Dóminum, \accent{om}nes \accent{Gen}tes:
+laudáte eum, \preparatory{omnes} \accent{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :tone => 'I.f',
+        :accent_style => :semantic,
+      }}).should eq expected
+    end
+
+    it 'marks accents and preparatory syllables each with different style' do
+      expected = 'Laudáte Dóminum, \underline{om}nes \underline{Gen}tes:
+laudáte eum, \preparatory{omnes} \underline{pó}puli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :tone => 'I.f',
+        :accent_style => :underline,
+        :preparatory_style => :semantic,
+      }}).should eq expected
+    end
+
+    it 'marks accents and preparatory syllables with nothing' do
+      expected = 'Laudáte Dóminum, omnes Gentes:
+laudáte eum, omnes pópuli:'
+      @outputter.process_verse(@verse, {:pointing => {
+        :accents => [1,1],
+        :preparatory => [2,2],
+        :accent_style => :none,
+      }}).should eq expected
+    end
+
     it 'inserts break-hints' do
       expected = 'Lau\-dá\-te Dó\-mi\-num, om\-nes \underline{Gen}\-tes:
 lau\-dá\-te e\-um, om\-nes \underline{pó}\-pu\-li:'

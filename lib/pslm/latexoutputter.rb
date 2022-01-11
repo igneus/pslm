@@ -183,6 +183,19 @@ module Pslm
           @options[:accents] = tone.collect {|part| part[0] }
           @options[:preparatory] = tone.collect {|part| part[1] }
         end
+
+        @accent_command =
+          @options[:accent_style] &&
+          ACCENT_MARKS[@options[:accent_style].to_sym]
+        @preparatory_command =
+          begin
+            style =
+              @options[:preparatory_style] ||
+              @options[:accent_style] &&
+              ACCENT_MARKS_TO_PREPARATORY_DEFAULTS[@options[:accent_style].to_sym]
+
+            style && PREPARATORY_MARKS[style.to_sym]
+          end
       end
 
       def part_format(text, part, verse, strophe, psalm)
@@ -192,10 +205,26 @@ module Pslm
         text
       end
 
-      MARKS = {
+      ACCENT_MARKS = {
         :underline => 'underline',
         :bold => 'textbf',
-        :semantic => 'accent'
+        :semantic => 'accent',
+        :none => nil,
+      }.freeze
+
+      PREPARATORY_MARKS = {
+        :italic => 'textit',
+        :semantic => 'preparatory',
+        :none => nil,
+      }.freeze
+
+      # which preparatory syllable style to use if only accent style
+      # is explicitly set
+      ACCENT_MARKS_TO_PREPARATORY_DEFAULTS = {
+        :underline => :italic,
+        :bold => :italic,
+        :semantic => :semantic,
+        :none => :none
       }
 
       def syllable_format(text, syll, word, part, verse, strophe, psalm)
@@ -203,20 +232,22 @@ module Pslm
         r = text
         if syll.accent? then
           @accent_counter += 1
-          if @accent_counter <= num_accents_for(part) then
-            r = "\\#{MARKS[@options[:accent_style].to_sym]}{#{r}}"
+          if @accent_counter <= num_accents_for(part) && @accent_command then
+            r = "\\#{@accent_command}{#{r}}"
           end
         end
 
         if num_preparatory_syllables_for(part) > 0 and
             @accent_counter >= num_accents_for(part) then
 
-          if @accent_counter == num_accents_for(part) and
-              @preparatories_counter == 1 then
+          if @accent_counter == num_accents_for(part) &&
+             @preparatories_counter == 1 &&
+             @preparatory_command
             r = r + "}"
           end
-          if @preparatories_counter == num_preparatory_syllables_for(part) then
-            r = '\textit{' + r
+          if @preparatories_counter == num_preparatory_syllables_for(part) &&
+             @preparatory_command
+            r = "\\#{@preparatory_command}{" + r
           end
 
           @preparatories_counter += 1
