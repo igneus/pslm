@@ -3,7 +3,7 @@
 Tool for automatic pointing of psalm texts for the traditional
 formulae of Gregorian chant psalmody.
 
-# Problem and it's solutions
+# Problem and its solutions
 
 When preparing booklets for chanted Divine Office, you probably have
 to - unless your schola is *extremely* skilled in Latin and psalmody -
@@ -29,7 +29,7 @@ deal with pointing of the psalm texts.
 
 **TODO**
 
-## `pslm` executable and it's invocation
+## `pslm` executable and its invocation
 
 * simplest -
   `pslm path/to/ps109.pslm`
