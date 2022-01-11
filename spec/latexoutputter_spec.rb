@@ -271,6 +271,19 @@ a říká si v srdci: ``Nepotrestá!''?"
       }).should eq expected
     end
 
+    it 'deletes quotation marks' do
+      verse_text = 'Jak to, že bezbožník [po]hrdá [Bo]hem *
+a říká si v srdci: "[Ne]po[tres]tá!"?'
+      expected = "Jak to, že bezbožník pohrdá Bohem
+a říká si v srdci: Nepotrestá!?"
+      verse = @reader.load_verse(StringIO.new(verse_text))
+      @outputter.process_verse(verse, {
+        :quote => :delete
+      }).should eq expected
+    end
+  end
+
+  describe '#process_psalm' do
     it 'replaces quotation marks correctly in a psalm' do
       psalm_text = 'Žalm 110, 1-5.7
 
@@ -291,17 +304,6 @@ zplodil jsem tě jako rosu před jitřenkou.\guillemotleft '
       psalm = @reader.read_str(psalm_text)
       @outputter.process_psalm(psalm, {
         :quote => :guillemets
-      }).should eq expected
-    end
-
-    it 'deletes quotation marks' do
-      verse_text = 'Jak to, že bezbožník [po]hrdá [Bo]hem *
-a říká si v srdci: "[Ne]po[tres]tá!"?'
-      expected = "Jak to, že bezbožník pohrdá Bohem
-a říká si v srdci: Nepotrestá!?"
-      verse = @reader.load_verse(StringIO.new(verse_text))
-      @outputter.process_verse(verse, {
-        :quote => :delete
       }).should eq expected
     end
 
