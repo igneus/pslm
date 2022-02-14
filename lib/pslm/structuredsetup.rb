@@ -42,7 +42,11 @@ class StructuredSetup < SimpleDelegator
   end
 
   def update(s2)
-    DeepMerge.deep_merge! s2, @data
+    DeepMerge.deep_merge!(
+      s2,
+      @data,
+      overwrite_arrays: true
+    )
   end
 
   private

@@ -72,5 +72,20 @@ describe StructuredSetup do
       setup.update({:elephant => {:ears => 'very large', :tail => true}})
       setup[:elephant].should eq({:ears => 'very large', :eyes => 'rather small', :tail => true})
     end
+
+    it 'does not attempt to merge arrays, overwrites them' do
+      setup = described_class.new({key: [1, 2]})
+      setup.update({key: [3]})
+
+      expect(setup[:key]).to eq [3]
+    end
+
+    it 'preserves duplicate values in arrays' do
+      setup = described_class.new({a: [1, 1]})
+      setup.update({b: [2, 2]})
+
+      expect(setup[:a]).to eq [1, 1]
+      expect(setup[:b]).to eq [2, 2]
+    end
   end
 end
