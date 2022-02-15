@@ -108,6 +108,10 @@ module Pslm
       def ==(p2)
         p2.is_a?(VersePart) && self.words == p2.words
       end
+
+      def syllables
+        words.flat_map &:syllables
+      end
     end
 
     class Word

@@ -310,6 +310,41 @@ a říká si v srdci: Nepotrestá!?"
         :quote => :delete
       }).should eq expected
     end
+
+    describe 'sliding accent' do
+      let(:settings) do
+        {:pointing => {
+           :accents => [2, 2],
+           :preparatory => [0,0],
+           :sliding_accent => [false, true],
+           :accent_style => :bold,
+         }}
+      end
+
+      let(:verse) { @reader.load_verse StringIO.new text }
+
+      describe 'no superfluous note' do
+        let(:text) { 'Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num.' }
+
+        it 'marks the accent as usual' do
+          @outputter.process_verse(verse, settings)
+            .should eq 'Quóniam confirmáta est super nos miseri\textbf{cór}dia \textbf{e}jus:
+et véritas Dómini manet \textbf{in} æ\textbf{tér}num.'
+        end
+      end
+
+      describe 'superfluous note given' do
+        let(:text) { 'Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
+lau/dá/te e/um, [om]nes [pó]pu/li:' }
+
+        it 'marks the accent and the superfluous note as single unit' do
+          @outputter.process_verse(verse, settings)
+            .should eq 'Laudáte Dóminum, \textbf{om}nes \textbf{Gen}tes:
+laudáte eum, \textbf{om}nes \textbf{pópu}li:'
+        end
+      end
+    end
   end
 
   describe '#process_psalm' do

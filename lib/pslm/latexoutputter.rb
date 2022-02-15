@@ -233,8 +233,16 @@ module Pslm
         if syll.accent? then
           @accent_counter += 1
           if @accent_counter <= num_accents_for(part) && @accent_command then
-            r = "\\#{@accent_command}{#{r}}"
+            r = "\\#{@accent_command}{#{r}"
+            if @accent_counter > 1 ||
+               !has_sliding_accent?(part) ||
+               part.syllables[-2] == syll
+              r += '}'
+            end
           end
+        elsif has_sliding_accent?(part) &&
+              part.syllables[-2] == syll
+          r += '}'
         end
 
         if num_preparatory_syllables_for(part) > 0 and
@@ -279,6 +287,17 @@ module Pslm
           @options[:preparatory][0]
         when :second
           @options[:preparatory][1]
+        end
+      end
+
+      def has_sliding_accent?(part)
+        case part.pos
+        when :first
+          @options.fetch(:sliding_accent, [])[0]
+        when :second
+          @options.fetch(:sliding_accent, [])[1]
+        else
+          false
         end
       end
     end
