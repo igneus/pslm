@@ -5,8 +5,6 @@
 require 'pslm'
 require 'optparse'
 
-require 'pslm/structuredsetup'
-
 DEFAULT_SETUP = {
   :general => {
     :format => 'latex', # latex|pslm
