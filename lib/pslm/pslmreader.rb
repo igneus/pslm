@@ -107,7 +107,7 @@ module Pslm
             end
             Psalm::Word.new(sylls)
           end
-          versepart = Psalm::VersePart.new(words, part_src, part[:name])
+          versepart = Psalm::VersePart.new(words, part[:name])
 
           verse.send(part[:method], versepart)
 

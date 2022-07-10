@@ -90,17 +90,13 @@ module Pslm
     end
 
     class VersePart
-      def initialize(words, src, pos)
+      def initialize(words, pos)
         @words = words
-        @src = src
         @pos = pos
       end
 
       # Array of Words
       attr_reader :words
-
-      # the source text before parsing
-      attr_reader :src
 
       # position in the verse - one of :flex, :first, :second
       attr_reader :pos

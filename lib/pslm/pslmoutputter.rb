@@ -2,10 +2,7 @@
 
 module Pslm
 
-  # reconstructs the input format
-  #
-  # an easier implementation would make use of VersePart#src, but
-  # this should be a simple example of full-depth output preparation
+  # serializes Psalm back to the input format
   class PslmOutputter < Outputter
 
     # doesn't respect any options; accepts them only because of a common
