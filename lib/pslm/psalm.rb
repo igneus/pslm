@@ -61,31 +61,23 @@ module Pslm
         @flex = flex
         @first = first
         @second = second
-        if second.nil? then
-          yield self
-        end
+        yield self if block_given?
       end
 
       attr_accessor :flex, :first, :second
 
       def parts
-        r = [@first, @second]
-        r.unshift @flex if @flex
-        return r
+        [@first, @second].tap do |r|
+          r.unshift @flex if @flex
+        end
       end
 
       def ==(v2)
-        unless v2.is_a? Verse
-          return false
-        end
+        return false unless v2.is_a? self.class
 
-        [:flex, :first, :second].each do |part|
-          if self.send(part) != v2.send(part) then
-            return false
-          end
+        [:flex, :first, :second].all? do |part|
+          self.public_send(part) == v2.public_send(part)
         end
-
-        return true
       end
     end
 
