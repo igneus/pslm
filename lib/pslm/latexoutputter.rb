@@ -251,17 +251,18 @@ module Pslm
 
         if num_preparatory_syllables_for(part) > 0 and
           @accent_counter >= num_accents_for(part) then
-          unless syll =~ /^[.,:;!]+$/
-            @preparatories_counter += 1
-          end
-
           if @accent_counter == num_accents_for(part) &&
-             @preparatories_counter == 1 &&
+             @preparatories_counter == 0 &&
              !@preparatories_started &&
              @preparatory_command
             r = r + "}"
             @preparatories_started = true
           end
+
+          unless syll =~ /^[.,:;!–-]+$/
+            @preparatories_counter += 1
+          end
+
           if @preparatories_counter == num_preparatory_syllables_for(part) &&
              !@preparatories_finished &&
              @preparatory_command
