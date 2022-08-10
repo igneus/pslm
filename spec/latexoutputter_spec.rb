@@ -169,6 +169,37 @@ laudáte \textit{eum, omnes} \underline{pó}puli:'
       }}).should eq expected
     end
 
+    # interpunction alone must not be counted as a preparatory syllable
+    describe 'handling interpunction after accent' do
+      it 'is handled correctly in first half-verse' do
+        given = 'Seslal jsi hojný déšť, Bože, [na] své [dě]dictví, *
+vzkřísils [je], když [ze]mdlelo.'
+        verse = @reader.load_verse(StringIO.new(given))
+
+        expected = 'Seslal jsi hojný déšť, Bože, \underline{na} své \underline{dě}dictví,
+vzkřísils \textit{je, když} \underline{ze}mdlelo.'
+        @outputter.process_verse(verse, {:pointing => {
+          :accents => [2,1],
+          :preparatory => [0, 2],
+          :accent_style => :underline,
+        }}).should eq expected
+      end
+
+      it 'is handled correctly in first half-verse' do
+        given = 'kéž se pozná na ze[mi], jak [jed]náš, *
+kéž poznají všechny národy, jak [za]chra[ňu]ješ.'
+        verse = @reader.load_verse(StringIO.new(given))
+
+        expected = 'kéž se pozná na zemi, \textit{jak} \underline{jed}náš,
+kéž poznají všechny národy, jak zachra\underline{ňu}ješ.'
+        @outputter.process_verse(verse, {:pointing => {
+          :accents => [1,1],
+          :preparatory => [1,0],
+          :accent_style => :underline,
+        }}).should eq expected
+      end
+    end
+
     it 'marks accents - bold' do
       expected = 'Laudáte Dóminum, omnes \textbf{Gen}tes:
 laudáte eum, omnes \textbf{pó}puli:'

@@ -202,6 +202,8 @@ module Pslm
         super(text, part, verse, strophe, psalm)
         @accent_counter = 0
         @preparatories_counter = 0
+        @preparatories_started = false
+        @preparatories_finished = false
         text
       end
 
@@ -240,25 +242,32 @@ module Pslm
               r += '}'
             end
           end
+
+          return r if @accent_counter == num_accents_for(part)
         elsif has_sliding_accent?(part) &&
               part.syllables[-2] == syll
           r += '}'
         end
 
         if num_preparatory_syllables_for(part) > 0 and
-            @accent_counter >= num_accents_for(part) then
+          @accent_counter >= num_accents_for(part) then
+          unless syll =~ /^[.,:;!]+$/
+            @preparatories_counter += 1
+          end
 
           if @accent_counter == num_accents_for(part) &&
              @preparatories_counter == 1 &&
+             !@preparatories_started &&
              @preparatory_command
             r = r + "}"
+            @preparatories_started = true
           end
           if @preparatories_counter == num_preparatory_syllables_for(part) &&
+             !@preparatories_finished &&
              @preparatory_command
             r = "\\#{@preparatory_command}{" + r
+            @preparatories_finished = true
           end
-
-          @preparatories_counter += 1
         end
 
         return r
