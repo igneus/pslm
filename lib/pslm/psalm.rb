@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+require 'forwardable'
 require 'ostruct'
 
 # parsed psalm data
@@ -45,11 +46,14 @@ module Pslm
     end
 
     class Strophe
+      extend Forwardable
+
       def initialize
         @verses = []
       end
 
       attr_reader :verses
+      def_delegators :verses, :empty?
 
       def ==(s2)
         s2.is_a?(Strophe) && self.verses == s2.verses

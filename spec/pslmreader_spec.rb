@@ -126,6 +126,22 @@ et véritas Dó/mi/ni ma/net [in] æ[tér]num."
       psalm_with_strophes.strophes.size.should eq 2
     end
 
+    it 'ignores repeated empty lines' do
+      psalm_text = "Psalmus 116.
+
+# comment
+
+Lau/dá/te Dó/mi/num, [om]nes [Gen]tes: *
+lau/dá/te e/um, [om]nes [pó]pu/li:
+
+
+Quóniam confirmáta est super nos mi/se/ri[cór]di/a [e]jus: *
+et véritas Dó/mi/ni ma/net [in] æ[tér]num."
+      psalm_with_strophes = subject.read_str(psalm_text)
+      psalm_with_strophes.verses.should eq @psalm.verses
+      psalm_with_strophes.strophes.size.should eq 2
+    end
+
     it 'handles prepositions connected to the following word as part of it\'s first syllable' do
       # needed for Czech texts
       psalm_text = "Žalm 4

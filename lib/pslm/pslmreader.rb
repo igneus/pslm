@@ -28,6 +28,7 @@ module Pslm
 
       while v = load_verse(istream) do
         if v == '' then
+          next if ps.strophes.last && ps.strophes.last.empty?
           ps.add_strophe
         else
           ps.add_verse v
