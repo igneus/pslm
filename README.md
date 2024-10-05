@@ -74,7 +74,7 @@ the executable.
 
 ## History
 
-I once wrote [psalmpreprocessor](https://github.com/igneus/In-adiutorium/blob/master/nastroje/psalmpreprocessor.rb)
+I once wrote [psalmpreprocessor](https://github.com/igneus/In-adiutorium/commits/524658a5b40a9fc47d2d7fd21304d1a77118ae4b/nastroje/psalmpreprocessor.rb)
 as a relatively simple ad-hoc sollution; then I extended it step by step.
 It was ugly and dirty at the beginning and got only dirtier.
 Then I restructured it, but it didn't get much cleaner. Then I needed it for another, quite different typesetting
